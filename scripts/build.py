@@ -20,8 +20,8 @@ def build_extension():
         with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(app_dir):
                 # Skip test-results directory
-                if "test-results" in root:
-                    continue
+                if "test-results" in dirs:
+                    dirs.remove("test-results")
                 for file in files:
                     if file.startswith("."):
                         continue
