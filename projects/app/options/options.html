@@ -88,9 +88,7 @@
         border: none;
         font-weight: 500;
         cursor: pointer;
-        transition:
-          box-shadow 0.2s,
-          background-color 0.2s;
+        transition: box-shadow 0.2s, background-color 0.2s;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -103,7 +101,7 @@
       }
 
       .btn-primary:hover {
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
       }
 
       .btn-outline {
@@ -122,7 +120,7 @@
       }
 
       .btn-tonal:hover {
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
       }
 
       .service-list {
@@ -171,6 +169,28 @@
         display: flex;
         gap: 16px;
       }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+
+      .section-header h2 {
+        margin: 0;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-chip {
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+      }
     </style>
   </head>
   <body>
@@ -178,30 +198,11 @@
       <h1>ServiceRoute-Solo 設定</h1>
 
       <section id="add-service">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-          "
-        >
-          <h2 style="margin: 0">サービスの追加</h2>
-          <div style="display: flex; gap: 8px">
-            <button
-              id="export-btn"
-              class="btn-tonal"
-              style="padding: 6px 12px; border-radius: 12px; font-size: 12px"
-            >
-              Export
-            </button>
-            <button
-              id="import-btn"
-              class="btn-tonal"
-              style="padding: 6px 12px; border-radius: 12px; font-size: 12px"
-            >
-              Import
-            </button>
+        <div class="section-header">
+          <h2>サービスの追加</h2>
+          <div class="header-actions">
+            <button id="export-btn" class="btn-tonal btn-chip">Export</button>
+            <button id="import-btn" class="btn-tonal btn-chip">Import</button>
           </div>
         </div>
         <div class="form-group">

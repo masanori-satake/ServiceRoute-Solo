@@ -149,13 +149,36 @@ async function importSettings() {
       throw new Error("Invalid format: 'services' array is missing.");
     }
 
+    // Basic validation for service objects
+    const isValid = data.services.every((s) => s.name && s.url);
+    if (!isValid) {
+      throw new Error("Invalid format: Some services are missing name or url.");
+    }
+
     if (
       !confirm(
-        "現在の設定が上書きされます。インポートを続行しますか？\n※個別のサービスへのアクセス権限は別途承認が必要になる場合があります。",
+        "現在の設定が上書きされます。インポートを続行しますか？\n※個別のサービスへのアクセス権限を承認する必要があります。",
       )
     ) {
       return;
     }
+
+    // Request permissions for imported origins
+    const origins = [
+      ...new Set(
+        data.services
+          .map((s) => {
+            try {
+              return new URL(s.url).origin + "/*";
+            } catch {
+              return null;
+            }
+          })
+          .filter(Boolean),
+      ),
+    ];
+
+    const granted = await chrome.permissions.request({ origins });
 
     await chrome.storage.local.set({
       services: data.services,
@@ -165,7 +188,11 @@ async function importSettings() {
     await loadServices();
     await loadBusinessHours();
     chrome.runtime.sendMessage({ type: "SETTINGS_UPDATED" });
-    alert("インポートが完了しました。");
+    alert(
+      granted
+        ? "インポートが完了しました。"
+        : "インポート完了（一部の権限は未承認です）",
+    );
   } catch (err) {
     console.error("Import failed", err);
     alert(
