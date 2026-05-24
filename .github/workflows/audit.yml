@@ -1,0 +1,31 @@
+name: "監査: 透明性とセキュリティ (Audit: Transparency and Security)"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'projects/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'package-lock.json'
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  actions: read
+  security-events: write
+  contents: read
+
+jobs:
+  osv-scan:
+    name: Google OSV-Scanner による脆弱性検査 (Vulnerability Scan)
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v1.9.1"
+    with:
+      scan-args: |-
+        --recursive
+        ./projects
+        ./package.json

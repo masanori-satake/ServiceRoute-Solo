@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ServiceRoute-Solo 設定</title>
+    <style>
+      :root {
+        --md-sys-color-primary: #0061a4;
+        --md-sys-color-on-primary: #ffffff;
+        --md-sys-color-surface: #fdfbff;
+        --md-sys-color-on-surface: #1a1c1e;
+        --md-sys-color-surface-variant: #e0e2ec;
+        --md-sys-color-on-surface-variant: #44474e;
+        --md-sys-color-outline: #74777f;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+        margin: 0;
+        padding: 24px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .container {
+        max-width: 800px;
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 24px;
+      }
+
+      section {
+        background-color: var(--md-sys-color-surface);
+        border: 1px solid var(--md-sys-color-surface-variant);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+      }
+
+      h2 {
+        font-size: 18px;
+        margin-top: 0;
+        margin-bottom: 16px;
+        color: var(--md-sys-color-primary);
+      }
+
+      .form-group {
+        margin-bottom: 16px;
+      }
+
+      label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 8px;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      input[type="text"],
+      input[type="url"],
+      input[type="time"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+
+      button {
+        padding: 10px 24px;
+        border-radius: 20px;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+
+      .btn-primary {
+        background-color: var(--md-sys-color-primary);
+        color: var(--md-sys-color-on-primary);
+      }
+
+      .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--md-sys-color-outline);
+        color: var(--md-sys-color-primary);
+      }
+
+      .service-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .service-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid var(--md-sys-color-surface-variant);
+      }
+
+      .service-info {
+        flex-grow: 1;
+      }
+
+      .service-name {
+        font-weight: bold;
+        display: block;
+      }
+
+      .service-url {
+        font-size: 12px;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .delete-btn {
+        color: #ba1a1a;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
+
+      .row {
+        display: flex;
+        gap: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>ServiceRoute-Solo 設定</h1>
+
+      <section id="add-service">
+        <h2>サービスの追加</h2>
+        <div class="form-group">
+          <label for="name">サービス名</label>
+          <input type="text" id="name" placeholder="例: 社内Jira" />
+        </div>
+        <div class="form-group">
+          <label for="url">URL</label>
+          <input type="url" id="url" placeholder="https://jira.example.com/" />
+        </div>
+        <div class="form-group">
+          <label for="loginKeyword">認証切れ検知キーワード（任意）</label>
+          <input type="text" id="loginKeyword" placeholder="例: login.jsp" />
+        </div>
+        <button id="save-service" class="btn-primary">
+          追加して権限を承認する
+        </button>
+      </section>
+
+      <section id="services">
+        <h2>監視対象サービス</h2>
+        <ul id="service-list" class="service-list">
+          <!-- JSで動的に追加 -->
+        </ul>
+      </section>
+
+      <section id="business-hours">
+        <h2>業務時間設定</h2>
+        <div class="row">
+          <div class="form-group">
+            <label for="start-time">開始</label>
+            <input type="time" id="start-time" value="09:00" />
+          </div>
+          <div class="form-group">
+            <label for="end-time">終了</label>
+            <input type="time" id="end-time" value="18:00" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="weekends-off" checked />
+            土日はチェックしない
+          </label>
+        </div>
+        <button id="save-hours" class="btn-outline">業務時間を保存</button>
+      </section>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>
