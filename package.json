@@ -1,0 +1,15 @@
+{
+  "name": "serviceroute-solo",
+  "version": "0.1.0",
+  "description": "User-centric service availability and connectivity route checker.",
+  "scripts": {
+    "test": "npx playwright test projects/app/tests --output projects/app/test-results",
+    "build": "mkdir -p releases && cd projects/app && zip -r ../../releases/ServiceRoute-Solo-Chrome.zip . -x \"*.log\"",
+    "version:bump": "echo 'Not implemented yet'"
+  },
+  "author": "Masanori SATAKE",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}
