@@ -1,6 +1,7 @@
 import json
 import zipfile
 import os
+import sys
 
 def build_extension():
     try:
