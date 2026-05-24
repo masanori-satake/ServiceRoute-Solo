@@ -11,12 +11,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   document
     .getElementById("save-hours")
     .addEventListener("click", saveBusinessHours);
-  document
-    .getElementById("export-btn")
-    .addEventListener("click", exportSettings);
-  document
-    .getElementById("import-btn")
-    .addEventListener("click", importSettings);
 });
 
 async function loadServices() {
@@ -124,81 +118,8 @@ async function saveBusinessHours() {
   };
 
   await chrome.storage.local.set({ businessHours });
-  alert("監視時間を保存しました。");
+  alert("業務時間を保存しました。");
   chrome.runtime.sendMessage({ type: "SETTINGS_UPDATED" });
-}
-
-async function exportSettings() {
-  const data = await chrome.storage.local.get(["services", "businessHours"]);
-  const json = JSON.stringify(data, null, 2);
-  try {
-    await navigator.clipboard.writeText(json);
-    alert("設定をクリップボードにコピーしました。");
-  } catch (err) {
-    console.error("Export failed", err);
-    alert("エクスポートに失敗しました。");
-  }
-}
-
-async function importSettings() {
-  try {
-    const text = await navigator.clipboard.readText();
-    const data = JSON.parse(text);
-
-    if (!data.services || !Array.isArray(data.services)) {
-      throw new Error("Invalid format: 'services' array is missing.");
-    }
-
-    // Basic validation for service objects
-    const isValid = data.services.every((s) => s.name && s.url);
-    if (!isValid) {
-      throw new Error("Invalid format: Some services are missing name or url.");
-    }
-
-    if (
-      !confirm(
-        "現在の設定が上書きされます。インポートを続行しますか？\n※個別のサービスへのアクセス権限を承認する必要があります。",
-      )
-    ) {
-      return;
-    }
-
-    // Request permissions for imported origins
-    const origins = [
-      ...new Set(
-        data.services
-          .map((s) => {
-            try {
-              return new URL(s.url).origin + "/*";
-            } catch {
-              return null;
-            }
-          })
-          .filter(Boolean),
-      ),
-    ];
-
-    const granted = await chrome.permissions.request({ origins });
-
-    await chrome.storage.local.set({
-      services: data.services,
-      businessHours: data.businessHours || null,
-    });
-
-    await loadServices();
-    await loadBusinessHours();
-    chrome.runtime.sendMessage({ type: "SETTINGS_UPDATED" });
-    alert(
-      granted
-        ? "インポートが完了しました。"
-        : "インポート完了（一部の権限は未承認です）",
-    );
-  } catch (err) {
-    console.error("Import failed", err);
-    alert(
-      "インポートに失敗しました。クリップボードに正しい形式のJSONがあるか確認してください。",
-    );
-  }
 }
 
 function escapeHtml(str) {
