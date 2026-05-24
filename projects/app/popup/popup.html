@@ -1,122 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ServiceRoute-Solo</title>
-  <style>
-    :root {
-      --md-sys-color-primary: #0061a4;
-      --md-sys-color-surface: #fdfbff;
-      --md-sys-color-on-surface: #1a1c1e;
-      --md-sys-color-surface-variant: #e0e2ec;
-      --md-sys-color-on-surface-variant: #44474e;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ServiceRoute-Solo</title>
+    <style>
+      :root {
+        --md-sys-color-primary: #0061a4;
+        --md-sys-color-surface: #fdfbff;
+        --md-sys-color-on-surface: #1a1c1e;
+        --md-sys-color-surface-variant: #e0e2ec;
+        --md-sys-color-on-surface-variant: #44474e;
+      }
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--md-sys-color-surface);
-      color: var(--md-sys-color-on-surface);
-      margin: 0;
-      padding: 16px;
-      width: 320px;
-    }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+        margin: 0;
+        padding: 16px;
+        width: 320px;
+      }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
 
-    h1 {
-      font-size: 18px;
-      margin: 0;
-    }
+      h1 {
+        font-size: 18px;
+        margin: 0;
+      }
 
-    .btn-icon {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 20px;
-      padding: 4px;
-    }
+      .btn-icon {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+        padding: 4px;
+      }
 
-    .service-card {
-      background-color: var(--md-sys-color-surface);
-      border: 1px solid var(--md-sys-color-surface-variant);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-    }
+      .service-card {
+        background-color: var(--md-sys-color-surface);
+        border: 1px solid var(--md-sys-color-surface-variant);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+      }
 
-    .status-icon {
-      font-size: 24px;
-      margin-right: 12px;
-    }
+      .status-icon {
+        font-size: 24px;
+        margin-right: 12px;
+      }
 
-    .service-info {
-      flex-grow: 1;
-    }
+      .service-info {
+        flex-grow: 1;
+      }
 
-    .service-name {
-      font-weight: bold;
-      display: block;
-    }
+      .service-name {
+        font-weight: bold;
+        display: block;
+      }
 
-    .service-status-msg {
-      font-size: 12px;
-      color: var(--md-sys-color-on-surface-variant);
-    }
+      .service-status-msg {
+        font-size: 12px;
+        color: var(--md-sys-color-on-surface-variant);
+      }
 
-    .failure-duration {
-      font-size: 11px;
-      color: #ba1a1a;
-      margin-left: 4px;
-    }
+      .failure-duration {
+        font-size: 11px;
+        color: #ba1a1a;
+        margin-left: 4px;
+      }
 
-    .last-check {
-      font-size: 10px;
-      color: var(--md-sys-color-on-surface-variant);
-      display: block;
-      margin-top: 4px;
-    }
+      .last-check {
+        font-size: 10px;
+        color: var(--md-sys-color-on-surface-variant);
+        display: block;
+        margin-top: 4px;
+      }
 
-    .actions {
-      margin-top: 16px;
-      text-align: center;
-    }
+      .actions {
+        margin-top: 16px;
+        text-align: center;
+      }
 
-    .btn-small {
-      padding: 6px 16px;
-      border-radius: 16px;
-      font-size: 12px;
-      cursor: pointer;
-    }
+      .btn-small {
+        padding: 6px 16px;
+        border-radius: 16px;
+        font-size: 12px;
+        cursor: pointer;
+      }
 
-    .empty-state {
-      text-align: center;
-      padding: 24px;
-      color: var(--md-sys-color-on-surface-variant);
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>サービス状況</h1>
-    <button id="open-settings" class="btn-icon" title="設定">⚙️</button>
-  </header>
+      .empty-state {
+        text-align: center;
+        padding: 24px;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>サービス状況</h1>
+      <button id="open-settings" class="btn-icon" title="設定">⚙️</button>
+    </header>
 
-  <main id="service-container">
-    <div class="empty-state">サービスが登録されていません。<br>設定から追加してください。</div>
-  </main>
+    <main id="service-container">
+      <div class="empty-state">
+        サービスが登録されていません。<br />設定から追加してください。
+      </div>
+    </main>
 
-  <div class="actions">
-    <button id="recheck-btn" class="btn-small">今すぐ再チェック</button>
-  </div>
+    <div class="actions">
+      <button id="recheck-btn" class="btn-small">今すぐ再チェック</button>
+    </div>
 
-  <script src="popup.js"></script>
-</body>
+    <script src="popup.js"></script>
+  </body>
 </html>
