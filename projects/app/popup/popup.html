@@ -38,8 +38,18 @@
         background: none;
         border: none;
         cursor: pointer;
-        font-size: 20px;
+        font-size: 24px;
         padding: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--md-sys-color-on-surface-variant);
+        border-radius: 50%;
+        transition: background-color 0.2s;
+      }
+
+      .btn-icon:hover {
+        background-color: var(--md-sys-color-surface-variant);
       }
 
       .service-card {
@@ -106,7 +116,9 @@
   <body>
     <header>
       <h1>サービス状況</h1>
-      <button id="open-settings" class="btn-icon" title="設定">⚙️</button>
+      <button id="open-settings" class="btn-icon" title="設定">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-1 13.5l103 78-110 190-119-50q-11 8-23 15t-24 12L590-80H370Zm70-80h80l12-93q20-5 39-15t35-23l86 36 40-70-76-58q2-11 2.5-22.5T675-480q0-11-.5-22.5T672-525l76-58-40-70-86 36q-16-13-35-23t-39-15l-12-93h-80l-12 93q-20 5-39 15t-35 23l-86-36-40 70 76 58q-2 11-2.5 22.5T285-480q0 11 .5 22.5t2.5 22.5l-76 58 40 70 86-36q16 13 35 23t39 15l12 93Zm40-200q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29ZM480-480Z"/></svg>
+      </button>
     </header>
 
     <main id="service-container">

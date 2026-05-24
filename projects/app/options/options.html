@@ -8,11 +8,19 @@
       :root {
         --md-sys-color-primary: #0061a4;
         --md-sys-color-on-primary: #ffffff;
+        --md-sys-color-primary-container: #d1e4ff;
+        --md-sys-color-on-primary-container: #001d36;
+        --md-sys-color-secondary-container: #e0e2ec;
+        --md-sys-color-on-secondary-container: #191c1e;
         --md-sys-color-surface: #fdfbff;
         --md-sys-color-on-surface: #1a1c1e;
         --md-sys-color-surface-variant: #e0e2ec;
         --md-sys-color-on-surface-variant: #44474e;
         --md-sys-color-outline: #74777f;
+        --md-sys-color-error: #ba1a1a;
+        --md-sys-color-on-error: #ffffff;
+        --md-sys-color-error-container: #ffdad6;
+        --md-sys-color-on-error-container: #410002;
       }
 
       body {
@@ -70,6 +78,8 @@
         border-radius: 4px;
         box-sizing: border-box;
         font-size: 16px;
+        background-color: transparent;
+        color: var(--md-sys-color-on-surface);
       }
 
       button {
@@ -78,7 +88,11 @@
         border: none;
         font-weight: 500;
         cursor: pointer;
-        transition: opacity 0.2s;
+        transition: box-shadow 0.2s, background-color 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
       }
 
       .btn-primary {
@@ -86,10 +100,27 @@
         color: var(--md-sys-color-on-primary);
       }
 
+      .btn-primary:hover {
+        box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      }
+
       .btn-outline {
         background-color: transparent;
         border: 1px solid var(--md-sys-color-outline);
         color: var(--md-sys-color-primary);
+      }
+
+      .btn-outline:hover {
+        background-color: var(--md-sys-color-primary-container);
+      }
+
+      .btn-tonal {
+        background-color: var(--md-sys-color-secondary-container);
+        color: var(--md-sys-color-on-secondary-container);
+      }
+
+      .btn-tonal:hover {
+        box-shadow: 0 1px 2px rgba(0,0,0,0.2);
       }
 
       .service-list {
@@ -120,10 +151,18 @@
       }
 
       .delete-btn {
-        color: #ba1a1a;
-        background: none;
+        color: var(--md-sys-color-error);
+        background-color: var(--md-sys-color-error-container);
         border: none;
         cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        transition: background-color 0.2s;
+      }
+
+      .delete-btn:hover {
+        background-color: #ffb4ab;
       }
 
       .row {
@@ -137,10 +176,16 @@
       <h1>ServiceRoute-Solo 設定</h1>
 
       <section id="add-service">
-        <h2>サービスの追加</h2>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+          <h2 style="margin: 0;">サービスの追加</h2>
+          <div style="display: flex; gap: 8px;">
+            <button id="export-btn" class="btn-tonal" style="padding: 6px 12px; border-radius: 12px; font-size: 12px;">Export</button>
+            <button id="import-btn" class="btn-tonal" style="padding: 6px 12px; border-radius: 12px; font-size: 12px;">Import</button>
+          </div>
+        </div>
         <div class="form-group">
           <label for="name">サービス名</label>
-          <input type="text" id="name" placeholder="例: 社内Jira" />
+          <input type="text" id="name" placeholder="例: Jira" />
         </div>
         <div class="form-group">
           <label for="url">URL</label>
@@ -163,7 +208,7 @@
       </section>
 
       <section id="business-hours">
-        <h2>業務時間設定</h2>
+        <h2>監視時間設定</h2>
         <div class="row">
           <div class="form-group">
             <label for="start-time">開始</label>
@@ -180,7 +225,7 @@
             土日はチェックしない
           </label>
         </div>
-        <button id="save-hours" class="btn-outline">業務時間を保存</button>
+        <button id="save-hours" class="btn-outline">監視時間を保存</button>
       </section>
     </div>
     <script src="options.js"></script>

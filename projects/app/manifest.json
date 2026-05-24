@@ -3,7 +3,7 @@
   "name": "ServiceRoute-Solo",
   "version": "0.1.0",
   "description": "User-centric service availability and connectivity route checker.",
-  "permissions": ["storage", "idle", "alarms"],
+  "permissions": ["storage", "idle", "alarms", "clipboardRead"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
   "background": {
     "service_worker": "background.js"

@@ -11,6 +11,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   document
     .getElementById("save-hours")
     .addEventListener("click", saveBusinessHours);
+  document
+    .getElementById("export-btn")
+    .addEventListener("click", exportSettings);
+  document
+    .getElementById("import-btn")
+    .addEventListener("click", importSettings);
 });
 
 async function loadServices() {
@@ -118,8 +124,54 @@ async function saveBusinessHours() {
   };
 
   await chrome.storage.local.set({ businessHours });
-  alert("業務時間を保存しました。");
+  alert("監視時間を保存しました。");
   chrome.runtime.sendMessage({ type: "SETTINGS_UPDATED" });
+}
+
+async function exportSettings() {
+  const data = await chrome.storage.local.get(["services", "businessHours"]);
+  const json = JSON.stringify(data, null, 2);
+  try {
+    await navigator.clipboard.writeText(json);
+    alert("設定をクリップボードにコピーしました。");
+  } catch (err) {
+    console.error("Export failed", err);
+    alert("エクスポートに失敗しました。");
+  }
+}
+
+async function importSettings() {
+  try {
+    const text = await navigator.clipboard.readText();
+    const data = JSON.parse(text);
+
+    if (!data.services || !Array.isArray(data.services)) {
+      throw new Error("Invalid format: 'services' array is missing.");
+    }
+
+    if (
+      !confirm(
+        "現在の設定が上書きされます。インポートを続行しますか？\n※個別のサービスへのアクセス権限は別途承認が必要になる場合があります。",
+      )
+    ) {
+      return;
+    }
+
+    await chrome.storage.local.set({
+      services: data.services,
+      businessHours: data.businessHours || null,
+    });
+
+    await loadServices();
+    await loadBusinessHours();
+    chrome.runtime.sendMessage({ type: "SETTINGS_UPDATED" });
+    alert("インポートが完了しました。");
+  } catch (err) {
+    console.error("Import failed", err);
+    alert(
+      "インポートに失敗しました。クリップボードに正しい形式のJSONがあるか確認してください。",
+    );
+  }
 }
 
 function escapeHtml(str) {
