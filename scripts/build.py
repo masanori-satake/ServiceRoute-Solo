@@ -7,8 +7,8 @@ def build_extension():
     try:
         with open("package.json", "r", encoding="utf-8") as f:
             package_data = json.load(f)
-            version = package_data["version"]
-            name = package_data["name"]
+            version = package_data.get("version")
+            name = package_data.get("name")
 
         release_dir = "releases"
         if not os.path.exists(release_dir):
@@ -17,11 +17,15 @@ def build_extension():
         zip_filename = os.path.join(release_dir, f"{name}-v{version}.zip")
         app_dir = os.path.join("projects", "app")
 
+        if not os.path.isdir(app_dir):
+            print(f"Error: Source directory not found: {app_dir}", file=sys.stderr)
+            return False
+
         with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(app_dir):
                 # Skip test-results directory
-                if "test-results" in dirs:
-                    dirs.remove("test-results")
+                if "test-results" in root:
+                    continue
                 for file in files:
                     if file.startswith("."):
                         continue
@@ -32,9 +36,9 @@ def build_extension():
         print(f"Built {zip_filename}")
         return True
     except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
+        print(f"Error: {e}")
         return False
 
 if __name__ == "__main__":
     if not build_extension():
-        sys.exit(1)
+        exit(1)
