@@ -32,7 +32,7 @@ def build_extension():
         print(f"Built {zip_filename}")
         return True
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         return False
 
 if __name__ == "__main__":
