@@ -202,7 +202,9 @@ async function checkOffHours() {
   const startTime = startH * 60 + startM;
   const endTime = endH * 60 + endM;
 
-  return currentTime < startTime || currentTime >= endTime;
+  return startTime < endTime
+    ? (currentTime < startTime || currentTime >= endTime)
+    : (currentTime < startTime && currentTime >= endTime);
 }
 
 /**
