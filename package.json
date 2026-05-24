@@ -4,7 +4,7 @@
   "description": "User-centric service availability and connectivity route checker.",
   "scripts": {
     "test": "npx playwright test projects/app/tests --output projects/app/test-results",
-    "build": "mkdir -p releases && cd projects/app && zip -r ../../releases/ServiceRoute-Solo-Chrome.zip . -x \"*.log\"",
+    "build": "python3 scripts/build.py",
     "version:bump": "echo 'Not implemented yet'"
   },
   "author": "Masanori SATAKE",
