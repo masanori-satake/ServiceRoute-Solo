@@ -7,8 +7,8 @@ def build_extension():
     try:
         with open("package.json", "r", encoding="utf-8") as f:
             package_data = json.load(f)
-            version = package_data.get("version")
-            name = package_data.get("name")
+            version = package_data["version"]
+            name = package_data["name"]
 
         release_dir = "releases"
         if not os.path.exists(release_dir):
