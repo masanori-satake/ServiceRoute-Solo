@@ -102,12 +102,7 @@ async function dispatchChecks() {
   }
 
   const { services = [] } = await chrome.storage.local.get('services');
-  const updatedServices = [];
-
-  for (const service of services) {
-    const result = await checkService(service);
-    updatedServices.push(result);
-  }
+  const updatedServices = await Promise.all(services.map(service => checkService(service)));
 
   await chrome.storage.local.set({ services: updatedServices });
   await updateGlobalInterval(updatedServices);
@@ -124,7 +119,8 @@ async function checkService(service) {
     const response = await fetch(url, {
       method: 'GET',
       redirect: 'follow',
-      cache: 'no-cache'
+      cache: 'no-cache',
+      signal: AbortSignal.timeout(10000) // 10 second timeout
     });
 
     if (response.redirected && loginKeyword && response.url.includes(loginKeyword)) {
