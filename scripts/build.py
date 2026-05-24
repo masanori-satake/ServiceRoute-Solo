@@ -37,4 +37,4 @@ def build_extension():
 
 if __name__ == "__main__":
     if not build_extension():
-        exit(1)
+        sys.exit(1)
