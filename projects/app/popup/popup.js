@@ -10,19 +10,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     chrome.runtime.openOptionsPage();
   });
 
-  document
-    .getElementById("recheck-btn")
-    .addEventListener("click", async (e) => {
-      const btn = e.target;
-      btn.disabled = true;
-      btn.textContent = "チェック中...";
+  const recheckBtn = document.getElementById("recheck-btn");
+  const recheckIcon = document.getElementById("recheck-icon");
 
-      chrome.runtime.sendMessage({ type: "RECHECK_NOW" }, async (response) => {
-        await renderServices();
-        btn.disabled = false;
-        btn.textContent = "今すぐ再チェック";
-      });
+  recheckBtn.addEventListener("click", async () => {
+    if (recheckBtn.disabled) return;
+
+    recheckBtn.disabled = true;
+    recheckIcon.classList.add("spinning");
+
+    chrome.runtime.sendMessage({ type: "RECHECK_NOW" }, async (response) => {
+      await renderServices();
+      recheckBtn.disabled = false;
+      recheckIcon.classList.remove("spinning");
     });
+  });
 });
 
 async function renderServices() {
@@ -44,20 +46,56 @@ async function renderServices() {
       ? calculateDuration(service.failureSince)
       : "";
     const lastCheckTime = service.lastCheck
-      ? new Date(service.lastCheck).toLocaleTimeString()
-      : "未実施";
+      ? new Date(service.lastCheck).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      : "--:--:--";
+
+    const statusInfo = getStatusSymbol(service.status);
 
     card.innerHTML = `
-      <div class="status-icon">${service.status || "🟢"}</div>
+      <div class="status-icon-container">
+        <span class="material-symbols-outlined ${statusInfo.className}">${statusInfo.symbol}</span>
+      </div>
       <div class="service-info">
         <span class="service-name">${escapeHtml(service.name)}</span>
-        <span class="service-status-msg">${escapeHtml(service.message)}</span>
-        ${duration ? `<span class="failure-duration">(${duration}前から)</span>` : ""}
-        <span class="last-check">最終確認: ${lastCheckTime}</span>
+        <span class="service-status-msg">
+          ${escapeHtml(service.message)}
+          ${duration ? `<span class="failure-duration">(${duration}前から)</span>` : ""}
+        </span>
+      </div>
+      <div class="last-check-container">
+        <span class="last-check-time">${lastCheckTime}</span>
       </div>
     `;
     container.appendChild(card);
   });
+}
+
+/**
+ * Maps emoji status to M3 Symbol and color class
+ */
+function getStatusSymbol(statusEmoji) {
+  switch (statusEmoji) {
+    case "🟢":
+      return { symbol: "check_circle", className: "status-ok" };
+    case "🟡":
+      return { symbol: "login", className: "status-warning" };
+    case "⚠️":
+      return { symbol: "warning", className: "status-warning" };
+    case "❌":
+      return { symbol: "error", className: "status-error" };
+    case "🚫":
+      return { symbol: "no_accounts", className: "status-auth" };
+    case "🐢":
+      return { symbol: "speed", className: "status-slow" };
+    case "💤":
+      return { symbol: "bedtime", className: "status-sleep" };
+    default:
+      return { symbol: "help", className: "" };
+  }
 }
 
 function calculateDuration(timestamp) {
@@ -73,6 +111,6 @@ function calculateDuration(timestamp) {
 
 function escapeHtml(str) {
   const div = document.createElement("div");
-  div.textContent = str;
+  div.textContent = str || "";
   return div.innerHTML;
 }
