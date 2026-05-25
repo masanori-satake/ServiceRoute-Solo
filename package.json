@@ -1,11 +1,11 @@
 {
   "name": "serviceroute-solo",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "User-centric service availability and connectivity route checker.",
   "scripts": {
     "test": "npx playwright test projects/app/tests --output projects/app/test-results",
     "build": "python3 scripts/build.py",
-    "version:bump": "echo 'Not implemented yet'"
+    "version:check": "python3 scripts/check_version.py"
   },
   "author": "Masanori SATAKE",
   "license": "MIT",
