@@ -46,7 +46,11 @@ async function renderServices() {
       ? calculateDuration(service.failureSince)
       : "";
     const lastCheckTime = service.lastCheck
-      ? new Date(service.lastCheck).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      ? new Date(service.lastCheck).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
       : "--:--:--";
 
     const statusInfo = getStatusSymbol(service.status);
