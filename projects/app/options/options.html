@@ -346,39 +346,22 @@
         bottom: 30px;
         transform: translateX(-50%);
         font-size: 14px;
-        box-shadow:
-          0 3px 5px -1px rgba(0, 0, 0, 0.2),
-          0 6px 10px 0 rgba(0, 0, 0, 0.14),
-          0 1px 18px 0 rgba(0, 0, 0, 0.12);
+        box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
       }
 
       #snackbar.show {
         visibility: visible;
-        animation:
-          fadein 0.5s,
-          fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
       }
 
       @keyframes fadein {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 30px;
-          opacity: 1;
-        }
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
       }
 
       @keyframes fadeout {
-        from {
-          bottom: 30px;
-          opacity: 1;
-        }
-        to {
-          bottom: 0;
-          opacity: 0;
-        }
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
       }
     </style>
   </head>
@@ -401,14 +384,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label
-            style="
-              display: flex;
-              align-items: center;
-              gap: 8px;
-              margin-bottom: 0;
-            "
-          >
+          <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
             <input type="checkbox" id="weekends-off" />
             土日はチェックしない
           </label>
@@ -433,56 +409,27 @@
         </div>
         <div class="form-group">
           <label>インポート設定:</label>
-          <div style="display: flex; gap: 16px; margin-top: 8px">
-            <label
-              style="
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 0;
-                color: var(--md-sys-color-on-surface);
-              "
-            >
-              <input type="radio" name="import-mode" value="append" checked />
+          <div style="display: flex; gap: 16px; margin-top: 8px;">
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 0; color: var(--md-sys-color-on-surface);">
+              <input type="radio" name="import-mode" value="append" checked>
               追記
             </label>
-            <label
-              style="
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 0;
-                color: var(--md-sys-color-on-surface);
-              "
-            >
-              <input type="radio" name="import-mode" value="overwrite" />
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 0; color: var(--md-sys-color-on-surface);">
+              <input type="radio" name="import-mode" value="overwrite">
               上書き
             </label>
           </div>
         </div>
-        <div style="display: flex; gap: 12px">
+        <div style="display: flex; gap: 12px;">
           <button id="export-btn" class="btn-outlined">
-            <span
-              class="material-symbols-outlined"
-              style="font-size: 20px; margin-right: 8px"
-              >download</span
-            >
+            <span class="material-symbols-outlined" style="font-size: 20px; margin-right: 8px;">download</span>
             エクスポート
           </button>
           <button id="import-btn" class="btn-outlined">
-            <span
-              class="material-symbols-outlined"
-              style="font-size: 20px; margin-right: 8px"
-              >upload</span
-            >
+            <span class="material-symbols-outlined" style="font-size: 20px; margin-right: 8px;">upload</span>
             インポート
           </button>
-          <input
-            type="file"
-            id="import-file"
-            style="display: none"
-            accept=".json"
-          />
+          <input type="file" id="import-file" style="display: none;" accept=".json">
         </div>
       </section>
 
@@ -546,7 +493,9 @@
             </tr>
             <tr>
               <td>
-                <span class="material-symbols-outlined status-slow">speed</span>
+                <span class="material-symbols-outlined status-slow"
+                  >speed</span
+                >
               </td>
               <td>接続制限</td>
               <td>429 Too Many Requests が発生しています。</td>
