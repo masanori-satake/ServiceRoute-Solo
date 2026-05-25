@@ -5,21 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ServiceRoute-Solo</title>
     <style>
+      @font-face {
+        font-family: 'Material Symbols Outlined';
+        font-style: normal;
+        src: url('../assets/fonts/material-symbols-outlined.woff2') format('woff2');
+      }
+
+      .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        font-feature-settings: 'liga';
+      }
+
       :root {
         --md-sys-color-primary: #0061a4;
         --md-sys-color-surface: #fdfbff;
         --md-sys-color-on-surface: #1a1c1e;
         --md-sys-color-surface-variant: #e0e2ec;
         --md-sys-color-on-surface-variant: #44474e;
+        --md-sys-color-outline: #74777f;
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         background-color: var(--md-sys-color-surface);
         color: var(--md-sys-color-on-surface);
         margin: 0;
         padding: 16px;
-        width: 320px;
+        width: 350px;
       }
 
       header {
@@ -30,83 +55,121 @@
       }
 
       h1 {
-        font-size: 18px;
+        font-size: 20px;
         margin: 0;
+        font-weight: 400;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 8px;
       }
 
       .btn-icon {
         background: none;
         border: none;
         cursor: pointer;
-        font-size: 20px;
-        padding: 4px;
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--md-sys-color-on-surface-variant);
+        transition: background-color 0.2s;
+      }
+
+      .btn-icon:hover {
+        background-color: var(--md-sys-color-surface-variant);
       }
 
       .service-card {
         background-color: var(--md-sys-color-surface);
         border: 1px solid var(--md-sys-color-surface-variant);
-        border-radius: 8px;
-        padding: 12px;
+        border-radius: 12px;
+        padding: 16px;
         margin-bottom: 12px;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
       }
 
-      .status-icon {
-        font-size: 24px;
-        margin-right: 12px;
+      .status-icon-container {
+        margin-right: 16px;
+        display: flex;
+        align-items: center;
+        height: 40px;
       }
 
       .service-info {
         flex-grow: 1;
+        display: flex;
+        flex-direction: column;
       }
 
       .service-name {
-        font-weight: bold;
-        display: block;
+        font-weight: 500;
+        font-size: 16px;
+        margin-bottom: 2px;
       }
 
       .service-status-msg {
-        font-size: 12px;
+        font-size: 13px;
         color: var(--md-sys-color-on-surface-variant);
       }
 
       .failure-duration {
         font-size: 11px;
         color: #ba1a1a;
-        margin-left: 4px;
       }
 
-      .last-check {
-        font-size: 10px;
-        color: var(--md-sys-color-on-surface-variant);
-        display: block;
-        margin-top: 4px;
+      .last-check-container {
+        margin-left: 8px;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
       }
 
-      .actions {
-        margin-top: 16px;
-        text-align: center;
-      }
-
-      .btn-small {
-        padding: 6px 16px;
-        border-radius: 16px;
+      .last-check-time {
         font-size: 12px;
-        cursor: pointer;
+        color: var(--md-sys-color-on-surface-variant);
+        white-space: nowrap;
       }
 
       .empty-state {
         text-align: center;
-        padding: 24px;
+        padding: 32px 16px;
         color: var(--md-sys-color-on-surface-variant);
+      }
+
+      /* Status Colors */
+      .status-ok { color: #2e7d32; }
+      .status-warning { color: #f57c00; }
+      .status-error { color: #d32f2f; }
+      .status-auth { color: #757575; }
+      .status-slow { color: #ed6c02; }
+      .status-sleep { color: #1976d2; }
+
+      /* Animation for re-check */
+      @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .spinning {
+        animation: rotate 1s linear infinite;
       }
     </style>
   </head>
   <body>
     <header>
       <h1>サービス状況</h1>
-      <button id="open-settings" class="btn-icon" title="設定">⚙️</button>
+      <div class="header-actions">
+        <button id="open-settings" class="btn-icon" title="設定">
+          <span class="material-symbols-outlined">settings</span>
+        </button>
+        <button id="recheck-btn" class="btn-icon" title="今すぐ再チェック">
+          <span class="material-symbols-outlined" id="recheck-icon">refresh</span>
+        </button>
+      </div>
     </header>
 
     <main id="service-container">
@@ -114,10 +177,6 @@
         サービスが登録されていません。<br />設定から追加してください。
       </div>
     </main>
-
-    <div class="actions">
-      <button id="recheck-btn" class="btn-small">今すぐ再チェック</button>
-    </div>
 
     <script src="popup.js"></script>
   </body>

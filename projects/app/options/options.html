@@ -5,53 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ServiceRoute-Solo 設定</title>
     <style>
+      @font-face {
+        font-family: 'Material Symbols Outlined';
+        font-style: normal;
+        src: url('../assets/fonts/material-symbols-outlined.woff2') format('woff2');
+      }
+
+      .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        font-feature-settings: 'liga';
+      }
+
       :root {
         --md-sys-color-primary: #0061a4;
         --md-sys-color-on-primary: #ffffff;
+        --md-sys-color-primary-container: #d1e4ff;
+        --md-sys-color-on-primary-container: #001d36;
         --md-sys-color-surface: #fdfbff;
         --md-sys-color-on-surface: #1a1c1e;
         --md-sys-color-surface-variant: #e0e2ec;
         --md-sys-color-on-surface-variant: #44474e;
         --md-sys-color-outline: #74777f;
+        --md-sys-color-outline-variant: #c4c6d0;
+        --md-sys-color-error: #ba1a1a;
+        --md-sys-color-on-error: #ffffff;
       }
 
       body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         background-color: var(--md-sys-color-surface);
         color: var(--md-sys-color-on-surface);
         margin: 0;
-        padding: 24px;
+        padding: 40px 24px;
         display: flex;
         justify-content: center;
       }
 
       .container {
-        max-width: 800px;
+        max-width: 600px;
         width: 100%;
       }
 
       h1 {
-        font-size: 24px;
-        margin-bottom: 24px;
+        font-size: 28px;
+        margin-bottom: 32px;
+        font-weight: 400;
       }
 
       section {
-        background-color: var(--md-sys-color-surface);
-        border: 1px solid var(--md-sys-color-surface-variant);
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 24px;
+        margin-bottom: 32px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
       }
 
       h2 {
-        font-size: 18px;
-        margin-top: 0;
-        margin-bottom: 16px;
-        color: var(--md-sys-color-primary);
+        font-size: 20px;
+        margin: 0;
+        font-weight: 500;
+        color: var(--md-sys-color-on-surface);
       }
 
+      /* Form elements */
       .form-group {
-        margin-bottom: 16px;
+        margin-bottom: 20px;
       }
 
       label {
@@ -65,44 +99,91 @@
       input[type="url"],
       input[type="time"] {
         width: 100%;
-        padding: 12px;
+        padding: 12px 16px;
         border: 1px solid var(--md-sys-color-outline);
         border-radius: 4px;
         box-sizing: border-box;
         font-size: 16px;
+        background-color: transparent;
       }
 
-      button {
-        padding: 10px 24px;
-        border-radius: 20px;
+      input[type="text"]:focus,
+      input[type="url"]:focus,
+      input[type="time"]:focus {
+        outline: 2px solid var(--md-sys-color-primary);
+        border-color: transparent;
+      }
+
+      /* Buttons */
+      .btn-icon {
+        background: none;
         border: none;
-        font-weight: 500;
         cursor: pointer;
-        transition: opacity 0.2s;
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--md-sys-color-on-surface-variant);
+        transition: background-color 0.2s;
+      }
+
+      .btn-icon:hover {
+        background-color: var(--md-sys-color-surface-variant);
       }
 
       .btn-primary {
         background-color: var(--md-sys-color-primary);
         color: var(--md-sys-color-on-primary);
+        padding: 10px 24px;
+        border-radius: 20px;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
       }
 
-      .btn-outline {
-        background-color: transparent;
-        border: 1px solid var(--md-sys-color-outline);
+      .btn-text {
+        background: none;
+        border: none;
         color: var(--md-sys-color-primary);
+        padding: 10px 16px;
+        border-radius: 20px;
+        font-weight: 500;
+        cursor: pointer;
       }
 
+      .btn-text:hover {
+        background-color: rgba(0, 97, 164, 0.08);
+      }
+
+      /* Service List */
       .service-list {
+        background-color: var(--md-sys-color-surface);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: 12px;
+        overflow: hidden;
         list-style: none;
         padding: 0;
+        margin: 0;
       }
 
       .service-item {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 12px;
-        border-bottom: 1px solid var(--md-sys-color-surface-variant);
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--md-sys-color-outline-variant);
+        background-color: var(--md-sys-color-surface);
+      }
+
+      .service-item:last-child {
+        border-bottom: none;
+      }
+
+      .drag-handle {
+        cursor: grab;
+        margin-right: 16px;
+        color: var(--md-sys-color-on-surface-variant);
+        user-select: none;
       }
 
       .service-info {
@@ -110,7 +191,7 @@
       }
 
       .service-name {
-        font-weight: bold;
+        font-weight: 500;
         display: block;
       }
 
@@ -120,10 +201,73 @@
       }
 
       .delete-btn {
-        color: #ba1a1a;
-        background: none;
-        border: none;
-        cursor: pointer;
+        color: var(--md-sys-color-error);
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.32);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal {
+        background-color: var(--md-sys-color-surface);
+        border-radius: 28px;
+        padding: 24px;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-title {
+        font-size: 24px;
+        margin-bottom: 16px;
+        font-weight: 400;
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 24px;
+      }
+
+      /* Legend Table */
+      .legend-section {
+        margin-top: 40px;
+      }
+
+      .legend-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      .legend-table th, .legend-table td {
+        text-align: left;
+        padding: 12px;
+        border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      }
+
+      .status-ok { color: #2e7d32; }
+      .status-warning { color: #f57c00; }
+      .status-error { color: #d32f2f; }
+      .status-auth { color: #757575; }
+      .status-slow { color: #ed6c02; }
+      .status-sleep { color: #1976d2; }
+
+      /* Drag and Drop styling */
+      .service-item.dragging {
+        opacity: 0.5;
+        background-color: var(--md-sys-color-surface-variant);
       }
 
       .row {
@@ -136,8 +280,91 @@
     <div class="container">
       <h1>ServiceRoute-Solo 設定</h1>
 
-      <section id="add-service">
-        <h2>サービスの追加</h2>
+      <section id="monitoring-hours">
+        <div class="section-header">
+          <h2>監視時間設定</h2>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label for="start-time">開始</label>
+            <input type="time" id="start-time" value="09:00" />
+          </div>
+          <div class="form-group">
+            <label for="end-time">終了</label>
+            <input type="time" id="end-time" value="18:00" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="weekends-off" checked />
+            土日はチェックしない
+          </label>
+        </div>
+        <button id="save-hours" class="btn-primary">監視時間を保存</button>
+      </section>
+
+      <section id="services">
+        <div class="section-header">
+          <h2>監視対象サービス</h2>
+          <button id="add-service-btn" class="btn-icon" title="サービスを追加">
+            <span class="material-symbols-outlined">add</span>
+          </button>
+        </div>
+        <ul id="service-list" class="service-list">
+          <!-- JSで動的に追加 -->
+        </ul>
+
+        <div class="legend-section">
+          <h3>ステータス凡例</h3>
+          <table class="legend-table">
+            <thead>
+              <tr>
+                <th>シンボル</th>
+                <th>状態</th>
+                <th>説明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="material-symbols-outlined status-ok">check_circle</span></td>
+                <td>正常稼働</td>
+                <td>サービスは正常に動作しています。</td>
+              </tr>
+              <tr>
+                <td><span class="material-symbols-outlined status-warning">login</span></td>
+                <td>要ログイン</td>
+                <td>SSOやログイン画面にリダイレクトされました。</td>
+              </tr>
+              <tr>
+                <td><span class="material-symbols-outlined status-error">error</span></td>
+                <td>障害発生中</td>
+                <td>サーバーエラーや接続不可の状態です。</td>
+              </tr>
+              <tr>
+                <td><span class="material-symbols-outlined status-auth">no_accounts</span></td>
+                <td>認証・権限エラー</td>
+                <td>401/403エラーが発生しました。設定を確認してください。</td>
+              </tr>
+              <tr>
+                <td><span class="material-symbols-outlined status-slow">speed</span></td>
+                <td>接続制限</td>
+                <td>429 Too Many Requests が発生しています。</td>
+              </tr>
+              <tr>
+                <td><span class="material-symbols-outlined status-sleep">bedtime</span></td>
+                <td>監視時間外</td>
+                <td>設定された監視時間外のため停止中です。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Add Service Modal -->
+    <div id="add-modal" class="modal-overlay">
+      <div class="modal">
+        <h3 class="modal-title">サービスの追加</h3>
         <div class="form-group">
           <label for="name">サービス名</label>
           <input type="text" id="name" placeholder="例: 社内Jira" />
@@ -150,39 +377,25 @@
           <label for="loginKeyword">認証切れ検知キーワード（任意）</label>
           <input type="text" id="loginKeyword" placeholder="例: login.jsp" />
         </div>
-        <button id="save-service" class="btn-primary">
-          追加して権限を承認する
-        </button>
-      </section>
-
-      <section id="services">
-        <h2>監視対象サービス</h2>
-        <ul id="service-list" class="service-list">
-          <!-- JSで動的に追加 -->
-        </ul>
-      </section>
-
-      <section id="business-hours">
-        <h2>業務時間設定</h2>
-        <div class="row">
-          <div class="form-group">
-            <label for="start-time">開始</label>
-            <input type="time" id="start-time" value="09:00" />
-          </div>
-          <div class="form-group">
-            <label for="end-time">終了</label>
-            <input type="time" id="end-time" value="18:00" />
-          </div>
+        <div class="modal-actions">
+          <button id="cancel-add" class="btn-text">キャンセル</button>
+          <button id="save-service" class="btn-primary">追加して権限を承認</button>
         </div>
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="weekends-off" checked />
-            土日はチェックしない
-          </label>
-        </div>
-        <button id="save-hours" class="btn-outline">業務時間を保存</button>
-      </section>
+      </div>
     </div>
+
+    <!-- Delete Confirm Modal -->
+    <div id="delete-modal" class="modal-overlay">
+      <div class="modal">
+        <h3 class="modal-title">サービスを削除しますか？</h3>
+        <p>このサービス「<span id="delete-service-name"></span>」の監視設定を削除します。この操作は取り消せません。</p>
+        <div class="modal-actions">
+          <button id="cancel-delete" class="btn-text">キャンセル</button>
+          <button id="confirm-delete" class="btn-primary" style="background-color: var(--md-sys-color-error);">削除する</button>
+        </div>
+      </div>
+    </div>
+
     <script src="options.js"></script>
   </body>
 </html>
