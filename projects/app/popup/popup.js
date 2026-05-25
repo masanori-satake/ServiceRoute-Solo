@@ -46,11 +46,7 @@ async function renderServices() {
       ? calculateDuration(service.failureSince)
       : "";
     const lastCheckTime = service.lastCheck
-      ? new Date(service.lastCheck).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        })
+      ? new Date(service.lastCheck).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
       : "--:--:--";
 
     const statusInfo = getStatusSymbol(service.status);
@@ -81,8 +77,10 @@ function getStatusSymbol(statusEmoji) {
   switch (statusEmoji) {
     case "🟢":
       return { symbol: "check_circle", className: "status-ok" };
-    case "⚠️":
+    case "🟡":
       return { symbol: "login", className: "status-warning" };
+    case "⚠️":
+      return { symbol: "warning", className: "status-warning" };
     case "❌":
       return { symbol: "error", className: "status-error" };
     case "🚫":

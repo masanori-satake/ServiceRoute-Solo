@@ -6,14 +6,13 @@
     <title>ServiceRoute-Solo</title>
     <style>
       @font-face {
-        font-family: "Material Symbols Outlined";
+        font-family: 'Material Symbols Outlined';
         font-style: normal;
-        src: url("../assets/fonts/material-symbols-outlined.woff2")
-          format("woff2");
+        src: url('../assets/fonts/material-symbols-outlined.woff2') format('woff2');
       }
 
       .material-symbols-outlined {
-        font-family: "Material Symbols Outlined";
+        font-family: 'Material Symbols Outlined';
         font-weight: normal;
         font-style: normal;
         font-size: 24px;
@@ -27,7 +26,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
-        font-feature-settings: "liga";
+        font-feature-settings: 'liga';
       }
 
       :root {
@@ -143,33 +142,17 @@
       }
 
       /* Status Colors */
-      .status-ok {
-        color: #2e7d32;
-      }
-      .status-warning {
-        color: #f57c00;
-      }
-      .status-error {
-        color: #d32f2f;
-      }
-      .status-auth {
-        color: #757575;
-      }
-      .status-slow {
-        color: #ed6c02;
-      }
-      .status-sleep {
-        color: #1976d2;
-      }
+      .status-ok { color: #2e7d32; }
+      .status-warning { color: #f57c00; }
+      .status-error { color: #d32f2f; }
+      .status-auth { color: #757575; }
+      .status-slow { color: #ed6c02; }
+      .status-sleep { color: #1976d2; }
 
       /* Animation for re-check */
       @keyframes rotate {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
       }
       .spinning {
         animation: rotate 1s linear infinite;
@@ -184,9 +167,7 @@
           <span class="material-symbols-outlined">settings</span>
         </button>
         <button id="recheck-btn" class="btn-icon" title="今すぐ再チェック">
-          <span class="material-symbols-outlined" id="recheck-icon"
-            >refresh</span
-          >
+          <span class="material-symbols-outlined" id="recheck-icon">refresh</span>
         </button>
       </div>
     </header>

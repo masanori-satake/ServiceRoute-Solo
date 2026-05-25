@@ -12,7 +12,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function loadSettings() {
-  const data = await chrome.storage.local.get(["services", "businessHours"]);
+  const data = await chrome.storage.local.get([
+    "services",
+    "businessHours",
+  ]);
 
   services = data.services || [];
   const hours = data.businessHours || {
@@ -29,6 +32,22 @@ async function loadSettings() {
 }
 
 function setupEventListeners() {
+  // Keep local services in sync with background updates to prevent overwriting status/lastCheck
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes.services) {
+      const newServices = changes.services.newValue || [];
+      newServices.forEach((newS) => {
+        const localS = services.find((s) => s.url === newS.url);
+        if (localS) {
+          localS.status = newS.status;
+          localS.message = newS.message;
+          localS.lastCheck = newS.lastCheck;
+          localS.failureSince = newS.failureSince;
+        }
+      });
+    }
+  });
+
   // Save Monitoring Hours
   document.getElementById("save-hours").addEventListener("click", async () => {
     const start = document.getElementById("start-time").value;
@@ -36,7 +55,7 @@ function setupEventListeners() {
     const weekendsOff = document.getElementById("weekends-off").checked;
 
     await chrome.storage.local.set({
-      businessHours: { start, end, weekendsOff },
+      businessHours: { start, end, weekendsOff }
     });
 
     notifySettingsUpdated();
@@ -74,60 +93,53 @@ function setupEventListeners() {
   });
 
   // Add Service
-  document
-    .getElementById("save-service")
-    .addEventListener("click", async () => {
-      const name = document.getElementById("name").value.trim();
-      const url = document.getElementById("url").value.trim();
-      const loginKeyword = document.getElementById("loginKeyword").value.trim();
+  document.getElementById("save-service").addEventListener("click", async () => {
+    const name = document.getElementById("name").value.trim();
+    const url = document.getElementById("url").value.trim();
+    const loginKeyword = document.getElementById("loginKeyword").value.trim();
 
-      if (!name || !url) {
-        alert("サービス名とURLを入力してください");
-        return;
-      }
+    if (!name || !url) {
+      alert("サービス名とURLを入力してください");
+      return;
+    }
 
-      try {
-        const formattedUrl = new URL(url).origin + "/*";
-        chrome.permissions.request(
-          { origins: [formattedUrl] },
-          async (granted) => {
-            if (granted) {
-              services.push({
-                name,
-                url,
-                loginKeyword,
-                status: "💤",
-                message: "監視待機中",
-                lastCheck: null,
-              });
-              await saveServices();
-              notifySettingsUpdated();
-              addModal.style.display = "none";
-              clearAddForm();
-              renderServiceList();
-            } else {
-              alert("権限が拒否されたため、サービスを追加できませんでした。");
-            }
-          },
-        );
-      } catch (e) {
-        alert("有効なURLを入力してください。");
-      }
-    });
+    try {
+      const formattedUrl = new URL(url).origin + "/*";
+      chrome.permissions.request({ origins: [formattedUrl] }, async (granted) => {
+        if (granted) {
+          services.push({
+            name,
+            url,
+            loginKeyword,
+            status: "💤",
+            message: "監視待機中",
+            lastCheck: null,
+          });
+          await saveServices();
+          notifySettingsUpdated();
+          addModal.style.display = "none";
+          clearAddForm();
+          renderServiceList();
+        } else {
+          alert("権限が拒否されたため、サービスを追加できませんでした。");
+        }
+      });
+    } catch (e) {
+      alert("有効なURLを入力してください。");
+    }
+  });
 
   // Confirm Delete
-  document
-    .getElementById("confirm-delete")
-    .addEventListener("click", async () => {
-      if (serviceToDeleteIndex > -1) {
-        services.splice(serviceToDeleteIndex, 1);
-        await saveServices();
-        notifySettingsUpdated();
-        deleteModal.style.display = "none";
-        serviceToDeleteIndex = -1;
-        renderServiceList();
-      }
-    });
+  document.getElementById("confirm-delete").addEventListener("click", async () => {
+    if (serviceToDeleteIndex > -1) {
+      services.splice(serviceToDeleteIndex, 1);
+      await saveServices();
+      notifySettingsUpdated();
+      deleteModal.style.display = "none";
+      serviceToDeleteIndex = -1;
+      renderServiceList();
+    }
+  });
 }
 
 function renderServiceList() {
@@ -135,8 +147,7 @@ function renderServiceList() {
   list.innerHTML = "";
 
   if (services.length === 0) {
-    list.innerHTML =
-      '<li class="service-item" style="justify-content: center; color: var(--md-sys-color-on-surface-variant);">登録されているサービスはありません</li>';
+    list.innerHTML = '<li class="service-item" style="justify-content: center; color: var(--md-sys-color-on-surface-variant);">登録されているサービスはありません</li>';
     return;
   }
 
@@ -193,11 +204,16 @@ function handleDragOver(e) {
 
 function handleDrop(e) {
   e.stopPropagation();
+  if (dragSrcIndex === null) {
+    return false;
+  }
   const targetIndex = this.dataset.index;
 
   if (dragSrcIndex !== targetIndex) {
-    const movedItem = services.splice(dragSrcIndex, 1)[0];
-    services.splice(targetIndex, 0, movedItem);
+    const srcIdx = parseInt(dragSrcIndex, 10);
+    const targetIdx = parseInt(targetIndex, 10);
+    const movedItem = services.splice(srcIdx, 1)[0];
+    services.splice(targetIdx, 0, movedItem);
     saveServices().then(() => {
       notifySettingsUpdated();
       renderServiceList();
@@ -215,7 +231,7 @@ async function saveServices() {
 }
 
 function notifySettingsUpdated() {
-  chrome.runtime.sendMessage({ type: "SETTINGS_UPDATED" });
+    chrome.runtime.sendMessage({ type: "SETTINGS_UPDATED" });
 }
 
 function clearAddForm() {
