@@ -43,6 +43,8 @@
         --md-sys-color-outline-variant: #c4c6d0;
         --md-sys-color-error: #ba1a1a;
         --md-sys-color-on-error: #ffffff;
+        --md-sys-color-inverse-surface: #2f3033;
+        --md-sys-color-inverse-on-surface: #f1f0f4;
       }
 
       body {
@@ -89,11 +91,23 @@
         margin-bottom: 20px;
       }
 
+      .form-group-horizontal {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
       label {
         display: block;
         font-size: 14px;
         margin-bottom: 8px;
         color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .form-group-horizontal label {
+        margin-bottom: 0;
+        white-space: nowrap;
       }
 
       input[type="text"],
@@ -113,6 +127,11 @@
       input[type="time"]:focus {
         outline: 2px solid var(--md-sys-color-primary);
         border-color: transparent;
+      }
+
+      input[type="radio"],
+      input[type="checkbox"] {
+        cursor: pointer;
       }
 
       /* Buttons */
@@ -141,6 +160,9 @@
         border: none;
         font-weight: 500;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .btn-text {
@@ -151,9 +173,29 @@
         border-radius: 20px;
         font-weight: 500;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .btn-text:hover {
+        background-color: rgba(0, 97, 164, 0.08);
+      }
+
+      .btn-outlined {
+        background: none;
+        border: 1px solid var(--md-sys-color-outline);
+        color: var(--md-sys-color-primary);
+        padding: 10px 24px;
+        border-radius: 20px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-outlined:hover {
         background-color: rgba(0, 97, 164, 0.08);
       }
 
@@ -286,7 +328,40 @@
 
       .row {
         display: flex;
-        gap: 16px;
+        gap: 24px;
+      }
+
+      /* Snackbar */
+      #snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: var(--md-sys-color-inverse-surface);
+        color: var(--md-sys-color-inverse-on-surface);
+        text-align: center;
+        border-radius: 4px;
+        padding: 14px 24px;
+        position: fixed;
+        z-index: 2000;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+        font-size: 14px;
+        box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+      }
+
+      #snackbar.show {
+        visibility: visible;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+
+      @keyframes fadein {
+        from {bottom: 0; opacity: 0;}
+        to {bottom: 30px; opacity: 1;}
+      }
+
+      @keyframes fadeout {
+        from {bottom: 30px; opacity: 1;}
+        to {bottom: 0; opacity: 0;}
       }
     </style>
   </head>
@@ -299,22 +374,21 @@
           <h2>監視時間設定</h2>
         </div>
         <div class="row">
-          <div class="form-group">
+          <div class="form-group-horizontal">
             <label for="start-time">開始</label>
-            <input type="time" id="start-time" value="09:00" />
+            <input type="time" id="start-time" value="00:00" />
           </div>
-          <div class="form-group">
+          <div class="form-group-horizontal">
             <label for="end-time">終了</label>
-            <input type="time" id="end-time" value="18:00" />
+            <input type="time" id="end-time" value="00:00" />
           </div>
         </div>
         <div class="form-group">
-          <label style="display: flex; align-items: center; gap: 8px">
-            <input type="checkbox" id="weekends-off" checked />
+          <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
+            <input type="checkbox" id="weekends-off" />
             土日はチェックしない
           </label>
         </div>
-        <button id="save-hours" class="btn-primary">監視時間を保存</button>
       </section>
 
       <section id="services">
@@ -327,84 +401,116 @@
         <ul id="service-list" class="service-list">
           <!-- JSで動的に追加 -->
         </ul>
+      </section>
 
-        <div class="legend-section">
-          <h3>ステータス凡例</h3>
-          <table class="legend-table">
-            <thead>
-              <tr>
-                <th>シンボル</th>
-                <th>状態</th>
-                <th>説明</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <span class="material-symbols-outlined status-ok"
-                    >check_circle</span
-                  >
-                </td>
-                <td>正常稼働</td>
-                <td>サービスは正常に動作しています。</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="material-symbols-outlined status-warning"
-                    >login</span
-                  >
-                </td>
-                <td>要ログイン</td>
-                <td>SSOやログイン画面にリダイレクトされました。(🟡)</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="material-symbols-outlined status-warning"
-                    >warning</span
-                  >
-                </td>
-                <td>注意</td>
-                <td>通常とは異なるHTTPステータスを検知しました。(⚠️)</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="material-symbols-outlined status-error"
-                    >error</span
-                  >
-                </td>
-                <td>障害発生中</td>
-                <td>サーバーエラーや接続不可の状態です。</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="material-symbols-outlined status-auth"
-                    >no_accounts</span
-                  >
-                </td>
-                <td>認証・権限エラー</td>
-                <td>401/403エラーが発生しました。設定を確認してください。</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="material-symbols-outlined status-slow"
-                    >speed</span
-                  >
-                </td>
-                <td>接続制限</td>
-                <td>429 Too Many Requests が発生しています。</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="material-symbols-outlined status-sleep"
-                    >bedtime</span
-                  >
-                </td>
-                <td>監視時間外</td>
-                <td>設定された監視時間外のため停止中です。</td>
-              </tr>
-            </tbody>
-          </table>
+      <section id="export-import">
+        <div class="section-header">
+          <h2>エクスポート/インポート</h2>
         </div>
+        <div class="form-group">
+          <label>インポート設定:</label>
+          <div style="display: flex; gap: 16px; margin-top: 8px;">
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 0; color: var(--md-sys-color-on-surface);">
+              <input type="radio" name="import-mode" value="append" checked>
+              追記
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 0; color: var(--md-sys-color-on-surface);">
+              <input type="radio" name="import-mode" value="overwrite">
+              上書き
+            </label>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button id="export-btn" class="btn-outlined">
+            <span class="material-symbols-outlined" style="font-size: 20px; margin-right: 8px;">download</span>
+            エクスポート
+          </button>
+          <button id="import-btn" class="btn-outlined">
+            <span class="material-symbols-outlined" style="font-size: 20px; margin-right: 8px;">upload</span>
+            インポート
+          </button>
+          <input type="file" id="import-file" style="display: none;" accept=".json">
+        </div>
+      </section>
+
+      <section class="legend-section">
+        <div class="section-header">
+          <h2>ステータス凡例</h2>
+        </div>
+        <table class="legend-table">
+          <thead>
+            <tr>
+              <th>シンボル</th>
+              <th>状態</th>
+              <th>説明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="material-symbols-outlined status-ok"
+                  >check_circle</span
+                >
+              </td>
+              <td>正常稼働</td>
+              <td>サービスは正常に動作しています。</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="material-symbols-outlined status-warning"
+                  >login</span
+                >
+              </td>
+              <td>要ログイン</td>
+              <td>SSOやログイン画面にリダイレクトされました。</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="material-symbols-outlined status-warning"
+                  >warning</span
+                >
+              </td>
+              <td>注意</td>
+              <td>通常とは異なるHTTPステータスを検知しました。</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="material-symbols-outlined status-error"
+                  >error</span
+                >
+              </td>
+              <td>障害発生中</td>
+              <td>サーバーエラーや接続不可の状態です。</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="material-symbols-outlined status-auth"
+                  >no_accounts</span
+                >
+              </td>
+              <td>認証・権限エラー</td>
+              <td>401/403エラーが発生しました。設定を確認してください。</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="material-symbols-outlined status-slow"
+                  >speed</span
+                >
+              </td>
+              <td>接続制限</td>
+              <td>429 Too Many Requests が発生しています。</td>
+            </tr>
+            <tr>
+              <td>
+                <span class="material-symbols-outlined status-sleep"
+                  >bedtime</span
+                >
+              </td>
+              <td>監視時間外</td>
+              <td>設定された監視時間外のため停止中です。</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
     </div>
 
@@ -453,6 +559,9 @@
         </div>
       </div>
     </div>
+
+    <!-- Snackbar -->
+    <div id="snackbar"></div>
 
     <script src="options.js"></script>
   </body>

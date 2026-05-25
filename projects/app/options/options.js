@@ -16,9 +16,9 @@ async function loadSettings() {
 
   services = data.services || [];
   const hours = data.businessHours || {
-    start: "09:00",
-    end: "18:00",
-    weekendsOff: true,
+    start: "00:00",
+    end: "00:00",
+    weekendsOff: false,
   };
 
   document.getElementById("start-time").value = hours.start;
@@ -45,8 +45,8 @@ function setupEventListeners() {
     }
   });
 
-  // Save Monitoring Hours
-  document.getElementById("save-hours").addEventListener("click", async () => {
+  // Auto-save Monitoring Hours
+  const saveHours = async () => {
     const start = document.getElementById("start-time").value;
     const end = document.getElementById("end-time").value;
     const weekendsOff = document.getElementById("weekends-off").checked;
@@ -56,8 +56,12 @@ function setupEventListeners() {
     });
 
     notifySettingsUpdated();
-    showToast("監視時間を保存しました");
-  });
+    showSnackbar("監視時間を保存しました");
+  };
+
+  document.getElementById("start-time").addEventListener("change", saveHours);
+  document.getElementById("end-time").addEventListener("change", saveHours);
+  document.getElementById("weekends-off").addEventListener("change", saveHours);
 
   // Modal controls
   const addModal = document.getElementById("add-modal");
@@ -144,6 +148,86 @@ function setupEventListeners() {
         renderServiceList();
       }
     });
+
+  // Export
+  document.getElementById("export-btn").addEventListener("click", async () => {
+    const data = await chrome.storage.local.get(["services", "businessHours"]);
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "ServiceRoute-settings.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    showSnackbar("設定をエクスポートしました");
+  });
+
+  // Import
+  const fileInput = document.getElementById("import-file");
+  document.getElementById("import-btn").addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const importedData = JSON.parse(event.target.result);
+        const mode = document.querySelector('input[name="import-mode"]:checked').value;
+
+        if (mode === "overwrite") {
+          // Overwrite everything
+          services = importedData.services || [];
+          const businessHours = importedData.businessHours || {
+            start: "00:00",
+            end: "00:00",
+            weekendsOff: false,
+          };
+          await chrome.storage.local.set({ services, businessHours });
+
+          // Update UI
+          document.getElementById("start-time").value = businessHours.start;
+          document.getElementById("end-time").value = businessHours.end;
+          document.getElementById("weekends-off").checked = businessHours.weekendsOff;
+        } else {
+          // Append services, update businessHours
+          const newServices = importedData.services || [];
+          // Simple deduplication based on URL
+          newServices.forEach(newS => {
+            if (!services.some(s => s.url === newS.url)) {
+              services.push(newS);
+            }
+          });
+
+          if (importedData.businessHours) {
+            await chrome.storage.local.set({
+              services,
+              businessHours: importedData.businessHours
+            });
+            document.getElementById("start-time").value = importedData.businessHours.start;
+            document.getElementById("end-time").value = importedData.businessHours.end;
+            document.getElementById("weekends-off").checked = importedData.businessHours.weekendsOff;
+          } else {
+            await chrome.storage.local.set({ services });
+          }
+        }
+
+        renderServiceList();
+        notifySettingsUpdated();
+        showSnackbar("設定をインポートしました");
+        fileInput.value = ""; // Reset
+      } catch (err) {
+        alert("インポートに失敗しました。ファイル形式を確認してください。");
+        console.error(err);
+      }
+    };
+    reader.readAsText(file);
+  });
 }
 
 function renderServiceList() {
@@ -245,10 +329,13 @@ function clearAddForm() {
   document.getElementById("loginKeyword").value = "";
 }
 
-function showToast(message) {
-  // In a real M3 app we would use a SnackBar, but alert is used for simplicity here
-  // as per the previous version's pattern.
-  alert(message);
+function showSnackbar(message) {
+  const snackbar = document.getElementById("snackbar");
+  snackbar.textContent = message;
+  snackbar.className = "show";
+  setTimeout(() => {
+    snackbar.className = snackbar.className.replace("show", "");
+  }, 3000);
 }
 
 function escapeHtml(str) {

@@ -24,9 +24,9 @@ chrome.runtime.onInstalled.addListener(async () => {
       isEnabled: true,
       checkInterval: INTERVALS.NORMAL,
       businessHours: {
-        start: "09:00",
-        end: "18:00",
-        weekendsOff: true,
+        start: "00:00",
+        end: "00:00",
+        weekendsOff: false,
       },
     });
   }
