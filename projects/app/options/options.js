@@ -178,7 +178,9 @@ function setupEventListeners() {
     reader.onload = async (event) => {
       try {
         const importedData = JSON.parse(event.target.result);
-        const mode = document.querySelector('input[name="import-mode"]:checked').value;
+        const mode = document.querySelector(
+          'input[name="import-mode"]:checked',
+        ).value;
 
         if (mode === "overwrite") {
           // Overwrite everything
@@ -193,13 +195,14 @@ function setupEventListeners() {
           // Update UI
           document.getElementById("start-time").value = businessHours.start;
           document.getElementById("end-time").value = businessHours.end;
-          document.getElementById("weekends-off").checked = businessHours.weekendsOff;
+          document.getElementById("weekends-off").checked =
+            businessHours.weekendsOff;
         } else {
           // Append services, update businessHours
           const newServices = importedData.services || [];
           // Simple deduplication based on URL
-          newServices.forEach(newS => {
-            if (!services.some(s => s.url === newS.url)) {
+          newServices.forEach((newS) => {
+            if (!services.some((s) => s.url === newS.url)) {
               services.push(newS);
             }
           });
@@ -207,11 +210,14 @@ function setupEventListeners() {
           if (importedData.businessHours) {
             await chrome.storage.local.set({
               services,
-              businessHours: importedData.businessHours
+              businessHours: importedData.businessHours,
             });
-            document.getElementById("start-time").value = importedData.businessHours.start;
-            document.getElementById("end-time").value = importedData.businessHours.end;
-            document.getElementById("weekends-off").checked = importedData.businessHours.weekendsOff;
+            document.getElementById("start-time").value =
+              importedData.businessHours.start;
+            document.getElementById("end-time").value =
+              importedData.businessHours.end;
+            document.getElementById("weekends-off").checked =
+              importedData.businessHours.weekendsOff;
           } else {
             await chrome.storage.local.set({ services });
           }
