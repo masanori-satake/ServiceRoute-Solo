@@ -33,13 +33,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: 1. バージョンの一貫性確認 (Version Consistency)
+      - name: バージョンの一貫性確認 (Version Consistency)
         run: python scripts/check_version.py
 
-      - name: 2. Google OSV-Scanner による脆弱性検査 (Vulnerability Scan)
-        uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v1.9.1"
-        with:
-          scan-args: |-
-            --recursive
-            ./projects
-            ./package.json
+  vulnerability-scan:
+    name: 脆弱性検査 (Vulnerability Scan)
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v1.9.1
+    with:
+      scan-args: |-
+        --recursive
+        ./projects
+        ./package.json
