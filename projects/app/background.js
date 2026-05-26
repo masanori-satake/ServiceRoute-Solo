@@ -58,7 +58,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true; // async response
   }
   if (message.type === "SETTINGS_UPDATED") {
-    setupAlarm().then(() => sendResponse({ success: true }));
+    // Re-setup alarm and trigger immediate check when settings change (e.g. service added)
+    // Run sequentially to avoid race condition on storage and alarm state
+    setupAlarm()
+      .then(dispatchChecks)
+      .then(() => sendResponse({ success: true }))
+      .catch((error) => {
+        console.error("Error updating settings and dispatching checks:", error);
+        sendResponse({ success: false, error: error.message });
+      });
     return true;
   }
 });
