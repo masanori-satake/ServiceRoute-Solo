@@ -25,6 +25,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       recheckIcon.classList.remove("spinning");
     });
   });
+
+  // Listen for storage changes to update UI automatically
+  chrome.storage.onChanged.addListener((changes, area) => {
+    if (area === "local" && changes.services) {
+      renderServices();
+    }
+  });
 });
 
 async function renderServices() {
