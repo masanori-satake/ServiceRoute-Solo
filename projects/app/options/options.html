@@ -553,11 +553,7 @@
             </tr>
             <tr>
               <td>
-                <span
-                  class="material-symbols-outlined"
-                  style="color: var(--md-sys-color-primary)"
-                  >sync_alt</span
-                >
+                <span class="material-symbols-outlined" style="color: var(--md-sys-color-primary);">sync_alt</span>
               </td>
               <td>リダイレクト検知</td>
               <td>
@@ -582,15 +578,7 @@
     <div id="add-modal" class="modal-overlay">
       <div class="modal">
         <h3 id="modal-title" class="modal-title">サービスの追加</h3>
-        <div
-          id="modal-message"
-          style="
-            margin-bottom: 16px;
-            font-size: 14px;
-            color: var(--md-sys-color-error);
-            display: none;
-          "
-        ></div>
+        <div id="modal-message" style="margin-bottom: 16px; font-size: 14px; color: var(--md-sys-color-error); display: none;"></div>
         <div class="form-group">
           <label for="name">サービス名</label>
           <input type="text" id="name" placeholder="例: 社内Jira" />
@@ -599,34 +587,11 @@
           <label for="url">URL</label>
           <input type="url" id="url" placeholder="https://jira.example.com/" />
         </div>
-        <div
-          id="redirect-suggestion"
-          style="margin-bottom: 20px; display: none"
-        >
-          <label style="color: var(--md-sys-color-primary); font-weight: 500"
-            >リダイレクト先を検知しました:</label
-          >
-          <div
-            style="
-              display: flex;
-              align-items: center;
-              gap: 8px;
-              margin-top: 4px;
-            "
-          >
-            <input
-              type="text"
-              id="redirect-url"
-              readonly
-              style="flex-grow: 1; font-size: 12px; padding: 8px"
-            />
-            <button
-              id="use-redirect-url"
-              class="btn-outlined"
-              style="padding: 6px 12px; font-size: 12px"
-            >
-              反映
-            </button>
+        <div id="redirect-suggestion" style="margin-bottom: 20px; display: none;">
+          <label style="color: var(--md-sys-color-primary); font-weight: 500;">リダイレクト先を検知しました:</label>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+            <input type="text" id="redirect-url" readonly style="flex-grow: 1; font-size: 12px; padding: 8px;" />
+            <button id="use-redirect-url" class="btn-outlined" style="padding: 6px 12px; font-size: 12px;">反映</button>
           </div>
         </div>
         <div class="form-group">

@@ -177,13 +177,19 @@ async function checkService(service) {
         cache: "no-cache",
         signal: AbortSignal.timeout(5000),
       });
-      if (redirectCheck.status >= 300 && redirectCheck.status < 400) {
+      if (
+        redirectCheck.status === 0 ||
+        redirectCheck.type === "opaqueredirect" ||
+        (redirectCheck.status >= 300 && redirectCheck.status < 400)
+      ) {
         const location = redirectCheck.headers.get("location");
         newState.status = "🔄";
         newState.message = "リダイレクト検知";
         if (location) {
           newState.redirectTarget = new URL(location, url).href;
         }
+        newState.lastCheck = Date.now();
+        newState.failureSince = null;
         return newState;
       }
     } catch (e) {

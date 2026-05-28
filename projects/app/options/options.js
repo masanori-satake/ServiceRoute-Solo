@@ -138,6 +138,9 @@ function setupEventListeners() {
                   serviceData.message = oldService.message;
                   serviceData.lastCheck = oldService.lastCheck;
                   serviceData.failureSince = oldService.failureSince;
+                  if (oldService.redirectTarget) {
+                    serviceData.redirectTarget = oldService.redirectTarget;
+                  }
                 }
                 services[serviceToEditIndex] = serviceData;
               } else {
