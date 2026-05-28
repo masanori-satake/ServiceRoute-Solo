@@ -304,7 +304,11 @@ function setupEventListeners() {
         const uniqueOrigins = allOrigins.filter((_, i) => !grantedStatus[i]);
 
         // Check if there's actually anything to update
-        if (mode === "append" && servicesToImport.length === 0 && !importedData.businessHours) {
+        if (
+          mode === "append" &&
+          servicesToImport.length === 0 &&
+          !importedData.businessHours
+        ) {
           showSnackbar("インポートする新しい設定はありません");
           fileInput.value = "";
           return;
