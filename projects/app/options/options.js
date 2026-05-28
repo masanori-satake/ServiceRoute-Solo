@@ -318,8 +318,8 @@ function setupEventListeners() {
 
         // Setup one-time click listener for confirmation
         const confirmBtn = document.getElementById("confirm-import");
-        const onConfirm = async () => {
-          confirmBtn.removeEventListener("click", onConfirm);
+        const onConfirm = async (e) => {
+          e.currentTarget.removeEventListener("click", onConfirm);
 
           if (uniqueOrigins.length > 0) {
             await new Promise((resolve) => {
