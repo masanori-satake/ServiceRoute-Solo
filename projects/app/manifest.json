@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ServiceRoute-Solo",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "User-centric service availability and connectivity route checker.",
   "permissions": ["storage", "idle", "alarms"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
