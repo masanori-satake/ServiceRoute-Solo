@@ -303,6 +303,13 @@ function setupEventListeners() {
         );
         const uniqueOrigins = allOrigins.filter((_, i) => !grantedStatus[i]);
 
+        // Check if there's actually anything to update
+        if (mode === "append" && servicesToImport.length === 0 && !importedData.businessHours) {
+          showSnackbar("インポートする新しい設定はありません");
+          fileInput.value = "";
+          return;
+        }
+
         // Show confirmation modal
         let message =
           mode === "overwrite"
@@ -322,11 +329,16 @@ function setupEventListeners() {
           e.currentTarget.removeEventListener("click", onConfirm);
 
           if (uniqueOrigins.length > 0) {
-            await new Promise((resolve) => {
-              chrome.permissions.request({ origins: uniqueOrigins }, () => {
-                resolve();
-              });
+            const granted = await new Promise((resolve) => {
+              chrome.permissions.request({ origins: uniqueOrigins }, resolve);
             });
+
+            if (!granted) {
+              importConfirmModal.style.display = "none";
+              fileInput.value = "";
+              alert("権限が承認されなかったため、インポートを中止しました。");
+              return;
+            }
           }
 
           // Execute Import
