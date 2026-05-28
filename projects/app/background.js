@@ -127,6 +127,7 @@ async function dispatchChecks() {
 async function checkService(service) {
   const { url, loginKeyword } = service;
   let newState = { ...service };
+  delete newState.redirectTarget;
 
   try {
     const response = await fetch(url, {
@@ -136,13 +137,15 @@ async function checkService(service) {
       signal: AbortSignal.timeout(10000), // 10 second timeout
     });
 
-    if (
-      response.redirected &&
-      loginKeyword &&
-      response.url.includes(loginKeyword)
-    ) {
-      newState.status = "🟡";
-      newState.message = "要ログイン（CAPTCHA等）";
+    if (response.redirected) {
+      if (loginKeyword && response.url.includes(loginKeyword)) {
+        newState.status = "🟡";
+        newState.message = "要ログイン（CAPTCHA等）";
+      } else {
+        newState.status = "🔄";
+        newState.message = "リダイレクト検知";
+        newState.redirectTarget = response.url;
+      }
       newState.failureSince = null;
     } else if (response.status >= 200 && response.status < 300) {
       newState.status = "🟢";
@@ -166,6 +169,32 @@ async function checkService(service) {
       newState.failureSince = newState.failureSince || Date.now();
     }
   } catch (error) {
+    try {
+      // Check if it's a redirect that caused the error (e.g. to a non-permitted origin)
+      const redirectCheck = await fetch(url, {
+        method: "GET",
+        redirect: "manual",
+        cache: "no-cache",
+        signal: AbortSignal.timeout(5000),
+      });
+      if (
+        redirectCheck.status === 0 ||
+        redirectCheck.type === "opaqueredirect" ||
+        (redirectCheck.status >= 300 && redirectCheck.status < 400)
+      ) {
+        const location = redirectCheck.headers.get("location");
+        newState.status = "🔄";
+        newState.message = "リダイレクト検知";
+        if (location) {
+          newState.redirectTarget = new URL(location, url).href;
+        }
+        newState.lastCheck = Date.now();
+        newState.failureSince = null;
+        return newState;
+      }
+    } catch (e) {
+      // Ignore secondary error
+    }
     newState.status = "❌";
     newState.message = "ネットワークエラー（プロキシ等）";
     newState.failureSince = newState.failureSince || Date.now();
@@ -182,7 +211,7 @@ async function updateGlobalInterval(services) {
   let minInterval = INTERVALS.NORMAL;
 
   for (const s of services) {
-    if (s.status === "❌" || s.status === "⚠️") {
+    if (s.status === "❌" || s.status === "⚠️" || s.status === "🔄") {
       const failureDuration = Date.now() - (s.failureSince || Date.now());
       const isInitial = failureDuration < 10 * 60 * 1000; // 10 minutes
       minInterval = Math.min(

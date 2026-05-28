@@ -98,6 +98,8 @@ function getStatusSymbol(statusEmoji) {
       return { symbol: "no_accounts", className: "status-auth" };
     case "🐢":
       return { symbol: "speed", className: "status-slow" };
+    case "🔄":
+      return { symbol: "sync_alt", className: "status-redirect" };
     case "💤":
       return { symbol: "bedtime", className: "status-sleep" };
     default:

@@ -5,6 +5,7 @@
 
 let services = [];
 let serviceToDeleteIndex = -1;
+let serviceToEditIndex = -1;
 
 document.addEventListener("DOMContentLoaded", async () => {
   await loadSettings();
@@ -68,12 +69,18 @@ function setupEventListeners() {
   const deleteModal = document.getElementById("delete-modal");
 
   document.getElementById("add-service-btn").addEventListener("click", () => {
-    addModal.style.display = "flex";
+    openAddModal();
   });
 
   document.getElementById("cancel-add").addEventListener("click", () => {
     addModal.style.display = "none";
     clearAddForm();
+  });
+
+  document.getElementById("use-redirect-url").addEventListener("click", () => {
+    document.getElementById("url").value =
+      document.getElementById("redirect-url").value;
+    document.getElementById("redirect-suggestion").style.display = "none";
   });
 
   document.getElementById("cancel-delete").addEventListener("click", () => {
@@ -93,13 +100,14 @@ function setupEventListeners() {
     }
   });
 
-  // Add Service
+  // Add/Edit Service
   document
     .getElementById("save-service")
     .addEventListener("click", async () => {
       const name = document.getElementById("name").value.trim();
       const url = document.getElementById("url").value.trim();
       const loginKeyword = document.getElementById("loginKeyword").value.trim();
+      const modalMessage = document.getElementById("modal-message");
 
       if (!name || !url) {
         alert("サービス名とURLを入力してください");
@@ -112,21 +120,42 @@ function setupEventListeners() {
           { origins: [formattedUrl] },
           async (granted) => {
             if (granted) {
-              services.push({
+              const serviceData = {
                 name,
                 url,
                 loginKeyword,
                 status: "💤",
                 message: "監視待機中",
                 lastCheck: null,
-              });
+                failureSince: null,
+              };
+
+              if (serviceToEditIndex > -1) {
+                // Keep status if URL hasn't changed, or reset if it has
+                const oldService = services[serviceToEditIndex];
+                if (oldService.url === url) {
+                  serviceData.status = oldService.status;
+                  serviceData.message = oldService.message;
+                  serviceData.lastCheck = oldService.lastCheck;
+                  serviceData.failureSince = oldService.failureSince;
+                  if (oldService.redirectTarget) {
+                    serviceData.redirectTarget = oldService.redirectTarget;
+                  }
+                }
+                services[serviceToEditIndex] = serviceData;
+              } else {
+                services.push(serviceData);
+              }
+
               await saveServices();
               notifySettingsUpdated();
               addModal.style.display = "none";
               clearAddForm();
               renderServiceList();
             } else {
-              alert("権限が拒否されたため、サービスを追加できませんでした。");
+              modalMessage.textContent =
+                "権限が拒否されたため、サービスを登録できません。監視を行うには「承認」が必要です。";
+              modalMessage.style.display = "block";
             }
           },
         );
@@ -287,11 +316,15 @@ function renderServiceList() {
     li.draggable = true;
     li.dataset.index = index;
 
+    const statusIcon = getStatusIcon(service.status);
     li.innerHTML = `
       <div class="drag-handle">
         <span class="material-symbols-outlined">drag_indicator</span>
       </div>
-      <div class="service-info">
+      <div class="status-icon-small" style="margin-right: 12px; display: flex; align-items: center;">
+        <span class="material-symbols-outlined" style="font-size: 20px; color: ${statusIcon.color}">${statusIcon.icon}</span>
+      </div>
+      <div class="service-info" style="cursor: pointer;">
         <span class="service-name">${escapeHtml(service.name)}</span>
         <span class="service-url">${escapeHtml(service.url)}</span>
       </div>
@@ -300,8 +333,14 @@ function renderServiceList() {
       </button>
     `;
 
+    // Edit event
+    li.querySelector(".service-info").addEventListener("click", () => {
+      openEditModal(index);
+    });
+
     // Delete button event
     li.querySelector(".delete-btn").addEventListener("click", (e) => {
+      e.stopPropagation();
       serviceToDeleteIndex = index;
       document.getElementById("delete-service-name").textContent = service.name;
       document.getElementById("delete-modal").style.display = "flex";
@@ -364,10 +403,43 @@ function notifySettingsUpdated() {
   chrome.runtime.sendMessage({ type: "SETTINGS_UPDATED" });
 }
 
+function openAddModal() {
+  serviceToEditIndex = -1;
+  document.getElementById("modal-title").textContent = "サービスの追加";
+  document.getElementById("save-service").textContent = "追加して権限を承認";
+  document.getElementById("modal-message").style.display = "none";
+  document.getElementById("redirect-suggestion").style.display = "none";
+  clearAddForm();
+  document.getElementById("add-modal").style.display = "flex";
+}
+
+function openEditModal(index) {
+  serviceToEditIndex = index;
+  const service = services[index];
+  document.getElementById("modal-title").textContent = "サービスの編集";
+  document.getElementById("save-service").textContent = "適用して権限を承認";
+  document.getElementById("modal-message").style.display = "none";
+
+  document.getElementById("name").value = service.name;
+  document.getElementById("url").value = service.url;
+  document.getElementById("loginKeyword").value = service.loginKeyword || "";
+
+  const redirectSuggestion = document.getElementById("redirect-suggestion");
+  if (service.redirectTarget) {
+    redirectSuggestion.style.display = "block";
+    document.getElementById("redirect-url").value = service.redirectTarget;
+  } else {
+    redirectSuggestion.style.display = "none";
+  }
+
+  document.getElementById("add-modal").style.display = "flex";
+}
+
 function clearAddForm() {
   document.getElementById("name").value = "";
   document.getElementById("url").value = "";
   document.getElementById("loginKeyword").value = "";
+  document.getElementById("redirect-url").value = "";
 }
 
 function showSnackbar(message) {
@@ -377,6 +449,29 @@ function showSnackbar(message) {
   setTimeout(() => {
     snackbar.className = snackbar.className.replace("show", "");
   }, 3000);
+}
+
+function getStatusIcon(status) {
+  switch (status) {
+    case "🟢":
+      return { icon: "check_circle", color: "#2e7d32" };
+    case "🟡":
+      return { icon: "login", color: "#f57c00" };
+    case "⚠️":
+      return { icon: "warning", color: "#f57c00" };
+    case "❌":
+      return { icon: "error", color: "#d32f2f" };
+    case "🚫":
+      return { icon: "no_accounts", color: "#757575" };
+    case "🐢":
+      return { icon: "speed", color: "#ed6c02" };
+    case "🔄":
+      return { icon: "sync_alt", color: "var(--md-sys-color-primary)" };
+    case "💤":
+      return { icon: "bedtime", color: "#1976d2" };
+    default:
+      return { icon: "help", color: "var(--md-sys-color-outline)" };
+  }
 }
 
 function escapeHtml(str) {
