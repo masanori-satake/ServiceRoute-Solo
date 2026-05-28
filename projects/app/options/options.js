@@ -67,6 +67,7 @@ function setupEventListeners() {
   // Modal controls
   const addModal = document.getElementById("add-modal");
   const deleteModal = document.getElementById("delete-modal");
+  const importConfirmModal = document.getElementById("import-confirm-modal");
 
   document.getElementById("add-service-btn").addEventListener("click", () => {
     openAddModal();
@@ -88,6 +89,11 @@ function setupEventListeners() {
     serviceToDeleteIndex = -1;
   });
 
+  document.getElementById("cancel-import").addEventListener("click", () => {
+    importConfirmModal.style.display = "none";
+    fileInput.value = "";
+  });
+
   // Close modal on outside click
   window.addEventListener("click", (e) => {
     if (e.target === addModal) {
@@ -97,6 +103,10 @@ function setupEventListeners() {
     if (e.target === deleteModal) {
       deleteModal.style.display = "none";
       serviceToDeleteIndex = -1;
+    }
+    if (e.target === importConfirmModal) {
+      importConfirmModal.style.display = "none";
+      fileInput.value = "";
     }
   });
 
@@ -246,51 +256,121 @@ function setupEventListeners() {
           'input[name="import-mode"]:checked',
         ).value;
 
+        let servicesToImport = [];
         if (mode === "overwrite") {
-          // Overwrite everything
-          services = importedData.services || [];
-          const businessHours = importedData.businessHours || {
-            start: "00:00",
-            end: "00:00",
-            weekendsOff: false,
-          };
-          await chrome.storage.local.set({ services, businessHours });
-
-          // Update UI
-          document.getElementById("start-time").value = businessHours.start;
-          document.getElementById("end-time").value = businessHours.end;
-          document.getElementById("weekends-off").checked =
-            businessHours.weekendsOff;
+          const rawServices = importedData.services || [];
+          // Deduplicate within the imported file
+          const seenUrls = new Set();
+          servicesToImport = rawServices.filter((s) => {
+            if (seenUrls.has(s.url)) return false;
+            seenUrls.add(s.url);
+            return true;
+          });
         } else {
-          // Append services, update businessHours
           const newServices = importedData.services || [];
-          // Simple deduplication based on URL
           newServices.forEach((newS) => {
-            if (!services.some((s) => s.url === newS.url)) {
-              services.push(newS);
+            if (
+              !services.some((s) => s.url === newS.url) &&
+              !servicesToImport.some((s) => s.url === newS.url)
+            ) {
+              servicesToImport.push(newS);
             }
           });
-
-          if (importedData.businessHours) {
-            await chrome.storage.local.set({
-              services,
-              businessHours: importedData.businessHours,
-            });
-            document.getElementById("start-time").value =
-              importedData.businessHours.start;
-            document.getElementById("end-time").value =
-              importedData.businessHours.end;
-            document.getElementById("weekends-off").checked =
-              importedData.businessHours.weekendsOff;
-          } else {
-            await chrome.storage.local.set({ services });
-          }
         }
 
-        renderServiceList();
-        notifySettingsUpdated();
-        showSnackbar("設定をインポートしました");
-        fileInput.value = ""; // Reset
+        // Check for required permissions
+        const allOrigins = [
+          ...new Set(
+            servicesToImport
+              .map((s) => {
+                try {
+                  return new URL(s.url).origin + "/*";
+                } catch (e) {
+                  return null;
+                }
+              })
+              .filter(Boolean),
+          ),
+        ];
+
+        const grantedStatus = await Promise.all(
+          allOrigins.map(
+            (origin) =>
+              new Promise((resolve) =>
+                chrome.permissions.contains({ origins: [origin] }, resolve),
+              ),
+          ),
+        );
+        const uniqueOrigins = allOrigins.filter((_, i) => !grantedStatus[i]);
+
+        // Show confirmation modal
+        let message =
+          mode === "overwrite"
+            ? `現在の設定を上書きして、${servicesToImport.length}件のサービスをインポートします。`
+            : `${servicesToImport.length}件の新しいサービスを追加インポートします。`;
+
+        if (uniqueOrigins.length > 0) {
+          message += " 監視のために必要な権限の承認を求めます。";
+        }
+
+        document.getElementById("import-confirm-message").textContent = message;
+        importConfirmModal.style.display = "flex";
+
+        // Setup one-time click listener for confirmation
+        const confirmBtn = document.getElementById("confirm-import");
+        const onConfirm = async () => {
+          confirmBtn.removeEventListener("click", onConfirm);
+
+          if (uniqueOrigins.length > 0) {
+            await new Promise((resolve) => {
+              chrome.permissions.request({ origins: uniqueOrigins }, () => {
+                resolve();
+              });
+            });
+          }
+
+          // Execute Import
+          if (mode === "overwrite") {
+            services = servicesToImport;
+            const businessHours = importedData.businessHours || {
+              start: "00:00",
+              end: "00:00",
+              weekendsOff: false,
+            };
+            await chrome.storage.local.set({ services, businessHours });
+            document.getElementById("start-time").value = businessHours.start;
+            document.getElementById("end-time").value = businessHours.end;
+            document.getElementById("weekends-off").checked =
+              businessHours.weekendsOff;
+          } else {
+            servicesToImport.forEach((s) => services.push(s));
+            if (importedData.businessHours) {
+              await chrome.storage.local.set({
+                services,
+                businessHours: importedData.businessHours,
+              });
+              document.getElementById("start-time").value =
+                importedData.businessHours.start;
+              document.getElementById("end-time").value =
+                importedData.businessHours.end;
+              document.getElementById("weekends-off").checked =
+                importedData.businessHours.weekendsOff;
+            } else {
+              await chrome.storage.local.set({ services });
+            }
+          }
+
+          importConfirmModal.style.display = "none";
+          renderServiceList();
+          notifySettingsUpdated();
+          showSnackbar("設定をインポートしました");
+          fileInput.value = "";
+        };
+
+        // Remove any previous listener just in case
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        newConfirmBtn.addEventListener("click", onConfirm);
       } catch (err) {
         alert("インポートに失敗しました。ファイル形式を確認してください。");
         console.error(err);
