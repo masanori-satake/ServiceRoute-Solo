@@ -106,8 +106,11 @@
         border-bottom: none;
       }
 
-      .service-item:hover {
+      .service-item:hover,
+      .service-item:focus-visible {
         background-color: var(--md-sys-color-surface-variant);
+        outline: 2px solid var(--md-sys-color-primary);
+        outline-offset: -2px;
       }
 
       .status-icon-container {

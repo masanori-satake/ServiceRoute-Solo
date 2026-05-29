@@ -35,7 +35,9 @@ function setupEventListeners() {
     if (area === "local") {
       if (changes.services) {
         services = changes.services.newValue || [];
-        renderServiceList();
+        if (!document.querySelector(".dragging")) {
+          renderServiceList();
+        }
       }
       if (changes.businessHours) {
         const hours = changes.businessHours.newValue;

@@ -52,6 +52,8 @@ async function renderServices() {
     const li = document.createElement("li");
     li.className = "service-item";
     li.title = `${service.name} (${service.url}) を開く`;
+    li.tabIndex = 0;
+    li.setAttribute("role", "button");
 
     const duration = service.failureSince
       ? calculateDuration(service.failureSince)
@@ -82,8 +84,16 @@ async function renderServices() {
       </div>
     `;
 
-    li.addEventListener("click", () => {
+    const openService = () => {
       chrome.tabs.create({ url: service.url });
+    };
+
+    li.addEventListener("click", openService);
+    li.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openService();
+      }
     });
 
     list.appendChild(li);
