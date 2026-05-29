@@ -19,11 +19,8 @@ def generate_store_assets():
         return False
 
     with sync_playwright() as p:
-        # Launch browser with the extension loaded
+        # Launch browser
         browser = p.chromium.launch(headless=True)
-
-        # Note: In headless mode, we can't easily test the actual extension popup/options as an extension.
-        # But we can render the HTML files directly to get high-quality screenshots of the UI.
 
         pages_to_screenshot = [
             {"name": "popup", "path": "popup/popup.html", "width": 400, "height": 600},
@@ -34,23 +31,22 @@ def generate_store_assets():
             page = browser.new_page(viewport={"width": item["width"], "height": item["height"]})
             file_url = f"file://{os.path.abspath(os.path.join(app_dir, item['path']))}"
 
-            # We need to mock some chrome extension APIs if they are used on load
-            # For simplicity, we just load and see.
-            # In a real scenario, we might need a more sophisticated mock.
-            page.goto(file_url)
-
-            # Inject mock for chrome.i18n and chrome.storage if needed
-            page.evaluate("""
+            # Inject mock for chrome.i18n and chrome.storage before loading the page
+            page.add_init_script("""
                 window.chrome = window.chrome || {};
                 window.chrome.storage = window.chrome.storage || {
                     local: {
-                        get: (keys, cb) => cb({
-                            services: [
-                                { name: 'Example Service', url: 'https://example.com', status: 'normal', lastCheck: Date.now() },
-                                { name: 'Issue Service', url: 'https://buggy.com', status: 'error', lastCheck: Date.now(), failureSince: Date.now() - 600000 }
-                            ],
-                            businessHours: { start: '00:00', end: '00:00', weekendsOff: false }
-                        }),
+                        get: (keys, cb) => {
+                            const data = {
+                                services: [
+                                    { name: 'Example Service', url: 'https://example.com', status: '🟢', lastCheck: Date.now() },
+                                    { name: 'Issue Service', url: 'https://buggy.com', status: '❌', lastCheck: Date.now(), failureSince: Date.now() - 600000 }
+                                ],
+                                businessHours: { start: '00:00', end: '00:00', weekendsOff: false }
+                            };
+                            if (cb) cb(data);
+                            return Promise.resolve(data);
+                        },
                         onChanged: { addListener: () => {} }
                     }
                 };
@@ -64,8 +60,8 @@ def generate_store_assets():
                 };
             """)
 
-            # Reload to apply mocks if necessary, or just wait
-            page.reload()
+            page.goto(file_url)
+            # Brief wait for rendering
             time.sleep(1)
 
             out_path = os.path.join(output_dir, f"{item['name']}.png")

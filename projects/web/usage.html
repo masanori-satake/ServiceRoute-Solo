@@ -1,88 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="usage_title">使いかた - ServiceRoute-Solo</title>
     <style>
-      :root {
-        --md-sys-color-primary: #386a20;
-        --md-sys-color-surface: #fdfdf5;
-        --md-sys-color-on-surface: #1a1c18;
-        --md-sys-color-outline: #75796c;
-      }
-      body {
-        margin: 0;
-        font-family: sans-serif;
-        background-color: var(--md-sys-color-surface);
-        color: var(--md-sys-color-on-surface);
-        line-height: 1.6;
-        padding: 40px 24px;
-      }
-      main {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      h1 {
-        border-bottom: 1px solid var(--md-sys-color-outline);
-        padding-bottom: 8px;
-      }
-      .step {
-        margin-bottom: 24px;
-      }
-      .step-num {
-        font-weight: bold;
-        color: var(--md-sys-color-primary);
-        margin-right: 8px;
-      }
-      footer {
-        margin-top: 40px;
-        text-align: center;
-      }
-      a {
-        color: var(--md-sys-color-primary);
-      }
+        :root {
+            --md-sys-color-primary: #386a20;
+            --md-sys-color-surface: #fdfdf5;
+            --md-sys-color-on-surface: #1a1c18;
+            --md-sys-color-outline: #75796c;
+        }
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            line-height: 1.6;
+            padding: 40px 24px;
+        }
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { border-bottom: 1px solid var(--md-sys-color-outline); padding-bottom: 8px; }
+        .step { margin-bottom: 24px; }
+        .step-num { font-weight: bold; color: var(--md-sys-color-primary); margin-right: 8px; }
+        footer { margin-top: 40px; text-align: center; }
+        a { color: var(--md-sys-color-primary); }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <main>
-      <h1 data-i18n="usage_title">ServiceRoute-Solo の使いかた</h1>
+        <h1 data-i18n="usage_title">ServiceRoute-Solo の使いかた</h1>
 
-      <div class="step">
-        <span class="step-num">1.</span>
-        <span data-i18n="usage_step1_t">サービスの追加</span>
-        <p data-i18n="usage_step1_p">
-          拡張機能のオプション画面を開き、「サービス名」と監視したい「URL」を入力して追加ボタンを押します。
-        </p>
-      </div>
+        <div class="step">
+            <span class="step-num">1.</span> <span data-i18n="usage_step1_t">サービスの追加</span>
+            <p data-i18n="usage_step1_p">拡張機能のオプション画面を開き、「サービス名」と監視したい「URL」を入力して追加ボタンを押します。</p>
+        </div>
 
-      <div class="step">
-        <span class="step-num">2.</span>
-        <span data-i18n="usage_step2_t">権限の許可</span>
-        <p data-i18n="usage_step2_p">
-          URLを追加すると、ブラウザからそのドメインへのアクセス権限を求めるポップアップが表示されます。「許可」を選択してください。
-        </p>
-      </div>
+        <div class="step">
+            <span class="step-num">2.</span> <span data-i18n="usage_step2_t">権限の許可</span>
+            <p data-i18n="usage_step2_p">URLを追加すると、ブラウザからそのドメインへのアクセス権限を求めるポップアップが表示されます。「許可」を選択してください。</p>
+        </div>
 
-      <div class="step">
-        <span class="step-num">3.</span>
-        <span data-i18n="usage_step3_t">稼働状況の確認</span>
-        <p data-i18n="usage_step3_p">
-          ブラウザ右上の拡張機能アイコン（ポップアップ）をクリックすると、現在の稼働状況が一覧で表示されます。異常が検知された場合は、色付きのアイコンで通知されます。
-        </p>
-      </div>
+        <div class="step">
+            <span class="step-num">3.</span> <span data-i18n="usage_step3_t">稼働状況の確認</span>
+            <p data-i18n="usage_step3_p">ブラウザ右上の拡張機能アイコン（ポップアップ）をクリックすると、現在の稼働状況が一覧で表示されます。異常が検知された場合は、色付きのアイコンで通知されます。</p>
+        </div>
 
-      <div class="step">
-        <span class="step-num">4.</span>
-        <span data-i18n="usage_step4_t">監視時間の設定</span>
-        <p data-i18n="usage_step4_p">
-          オプション画面の「監視時間設定」から、自動チェックを行う時間帯や曜日を指定できます。業務時間外はチェックを停止してバッテリーや通信量を節約します。
-        </p>
-      </div>
+        <div class="step">
+            <span class="step-num">4.</span> <span data-i18n="usage_step4_t">監視時間の設定</span>
+            <p data-i18n="usage_step4_p">オプション画面の「監視時間設定」から、自動チェックを行う時間帯や曜日を指定できます。業務時間外はチェックを停止してバッテリーや通信量を節約します。</p>
+        </div>
 
-      <p><a href="index.html" data-i18n="back_home">ホームに戻る</a></p>
+        <p><a href="index.html" data-i18n="back_home">ホームに戻る</a></p>
     </main>
-    <footer>&copy; 2026 Masanori SATAKE</footer>
+    <footer>
+        &copy; 2026 Masanori SATAKE
+    </footer>
     <script src="assets/i18n.js"></script>
-  </body>
+</body>
 </html>
