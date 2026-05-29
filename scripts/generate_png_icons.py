@@ -2,7 +2,7 @@ import os
 import sys
 import re
 
-def generate_icons(output_dir=None, bg_color=None):
+def generate_icons(output_dir=None, bg_color=None, file_prefix="icon"):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.dirname(script_dir)
     svg_path = os.path.join(root_dir, "projects/app/assets/icon.svg")
@@ -16,8 +16,8 @@ def generate_icons(output_dir=None, bg_color=None):
         svg_content = f.read()
 
     if bg_color:
-        # Replace the first fill attribute (usually the circle background)
-        svg_content = re.sub(r'fill=["\'][^"\']+["\']', f'fill="{bg_color}"', svg_content, count=1)
+        # Replace the Green color (#386a20) with the new bg_color
+        svg_content = svg_content.replace("#386a20", bg_color)
 
     try:
         from playwright.sync_api import sync_playwright
@@ -34,7 +34,7 @@ def generate_icons(output_dir=None, bg_color=None):
         page.set_content(f'<!DOCTYPE html><html><head><style>html, body {{ margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }} svg {{ width: 100%; height: 100%; display: block; }}</style></head><body>{svg_content}</body></html>')
 
         for size in [16, 32, 48, 128]:
-            out = os.path.join(output_dir, f"icon{size}.png")
+            out = os.path.join(output_dir, f"{file_prefix}{size}.png")
             page.set_viewport_size({"width": size, "height": size})
             # Brief wait for rendering
             page.wait_for_timeout(100)
@@ -44,7 +44,8 @@ def generate_icons(output_dir=None, bg_color=None):
     return True
 
 if __name__ == "__main__":
-    bg_color = sys.argv[2] if len(sys.argv) > 2 else None
     output_dir = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] != "" else None
-    if not generate_icons(output_dir, bg_color):
+    bg_color = sys.argv[2] if len(sys.argv) > 2 else None
+    file_prefix = sys.argv[3] if len(sys.argv) > 3 else "icon"
+    if not generate_icons(output_dir, bg_color, file_prefix):
         sys.exit(1)

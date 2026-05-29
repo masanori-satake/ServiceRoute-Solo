@@ -31,10 +31,12 @@ chrome.runtime.onInstalled.addListener(async () => {
     });
   }
   setupAlarm();
+  updateActionIcon();
 });
 
 chrome.runtime.onStartup.addListener(() => {
   setupAlarm();
+  updateActionIcon();
 });
 
 /**
@@ -108,7 +110,7 @@ async function dispatchChecks() {
   const isOffHours = await checkOffHours();
   if (isOffHours) {
     console.log("Off-hours: skipping checks.");
-    updateStateForAll("💤");
+    await updateStateForAll("💤");
     return;
   }
 
@@ -119,6 +121,7 @@ async function dispatchChecks() {
 
   await chrome.storage.local.set({ services: updatedServices });
   await updateGlobalInterval(updatedServices);
+  await updateActionIcon();
 }
 
 /**
@@ -257,10 +260,47 @@ async function checkOffHours() {
 }
 
 /**
+ * Update the extension icon based on the current status of all services
+ */
+async function updateActionIcon() {
+  const { services = [] } = await chrome.storage.local.get("services");
+
+  let globalStatus = "OK";
+  if (services.some((s) => ["❌", "⚠️", "🚫"].includes(s.status))) {
+    globalStatus = "ERROR";
+  } else if (services.some((s) => ["🟡", "🔄", "🐢"].includes(s.status))) {
+    globalStatus = "WARNING";
+  }
+
+  if (globalStatus === "ERROR") {
+    setIcon("error");
+  } else if (globalStatus === "WARNING") {
+    setIcon("warning");
+  } else {
+    setIcon("icon");
+  }
+}
+
+/**
+ * Helper to set action icon
+ */
+function setIcon(prefix) {
+  chrome.action.setIcon({
+    path: {
+      16: `icons/${prefix}16.png`,
+      32: `icons/${prefix}32.png`,
+      48: `icons/${prefix}48.png`,
+      128: `icons/${prefix}128.png`,
+    },
+  });
+}
+
+/**
  * Placeholder for updating state
  */
 async function updateStateForAll(status) {
   const { services = [] } = await chrome.storage.local.get("services");
   const updatedServices = services.map((s) => ({ ...s, status }));
   await chrome.storage.local.set({ services: updatedServices });
+  await updateActionIcon();
 }
