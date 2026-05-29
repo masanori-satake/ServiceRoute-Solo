@@ -58,7 +58,7 @@ def generate_store_assets():
                     getMessage: (key) => key
                 };
                 window.chrome.runtime = window.chrome.runtime || {
-                    getManifest: () => ({ version: '0.3.8' }),
+                    getManifest: () => ({ version: '0.3.9' }),
                     sendMessage: () => {},
                     onMessage: { addListener: () => {} }
                 };

@@ -6,9 +6,9 @@ We currently support the following versions for security updates.
 現在、以下のバージョンについてセキュリティアップデートをサポートしています。
 
 | Version | Supported |
-| :------ | :-------: |
-| Latest  |    ✅     |
-| < 0.3.x |    ❌     |
+| :--- | :---: |
+| Latest | ✅ |
+| < 0.3.x | ❌ |
 
 ---
 
@@ -33,17 +33,14 @@ This project prioritizes user privacy and security through the following archite
 本プロジェクトでは、ユーザーのプライバシーとセキュリティを最優先し、以下の設計指針を採用しています。
 
 ### 1. Local-Only Architecture / 完全ローカル動作
-
 ServiceRoute-Solo operates entirely within your browser. All monitoring targets and status data are stored in `chrome.storage.local` on your device. No data is sent to external servers, ensuring your configuration remains private.
 本拡張機能はブラウザ内で完結して動作します。すべての監視対象設定やステータスデータはデバイス上の `chrome.storage.local` に保存され、外部サーバーへの通信は一切行われません。
 
 ### 2. Vanilla JS (Zero Dependencies) / Vanilla JS の採用
-
 By avoiding external frameworks and libraries, we eliminate the risk of "Dependency Hell" and supply chain attacks. The codebase is transparent and easy to audit for any security professional.
 外部のフレームワークやライブラリに依存しないことで、依存関係の脆弱性やサプライチェーン攻撃のリスクを排除しています。コードの透明性が高く、セキュリティ監査も容易です。
 
 ### 3. Least Privilege (Dynamic Permissions) / 最小権限の原則
-
 We use `optional_host_permissions` to ensure the extension only accesses domains explicitly authorized by the user.
 `optional_host_permissions` を活用し、ユーザーが明示的に許可したドメインにのみアクセスする最小権限の原則を徹底しています。
 

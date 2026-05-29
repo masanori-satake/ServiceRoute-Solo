@@ -1,301 +1,254 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-i18n="title">
-      ServiceRoute-Solo - サービス稼働状況チェッカー
-    </title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">ServiceRoute-Solo - サービス稼働状況チェッカー</title>
     <style>
-      :root {
-        --md-sys-color-primary: #386a20;
-        --md-sys-color-on-primary: #ffffff;
-        --md-sys-color-primary-container: #b8f397;
-        --md-sys-color-on-primary-container: #042100;
-        --md-sys-color-surface: #fdfdf5;
-        --md-sys-color-on-surface: #1a1c18;
-        --md-sys-color-surface-variant: #e1e4d5;
-        --md-sys-color-on-surface-variant: #44483d;
-        --md-sys-color-outline: #75796c;
-      }
+        :root {
+            --md-sys-color-primary: #386a20;
+            --md-sys-color-on-primary: #ffffff;
+            --md-sys-color-primary-container: #b8f397;
+            --md-sys-color-on-primary-container: #042100;
+            --md-sys-color-surface: #fdfdf5;
+            --md-sys-color-on-surface: #1a1c18;
+            --md-sys-color-surface-variant: #e1e4d5;
+            --md-sys-color-on-surface-variant: #44483d;
+            --md-sys-color-outline: #75796c;
+        }
 
-      @font-face {
-        font-family: "Material Symbols Outlined";
-        font-style: normal;
-        src: url(assets/fonts/material-symbols-outlined.woff2) format("woff2");
-      }
+        @font-face {
+            font-family: 'Material Symbols Outlined';
+            font-style: normal;
+            src: url(assets/fonts/material-symbols-outlined.woff2) format('woff2');
+        }
 
-      .material-symbols-outlined {
-        font-family: "Material Symbols Outlined";
-        font-weight: normal;
-        font-style: normal;
-        font-size: 24px;
-        line-height: 1;
-        letter-spacing: normal;
-        text-transform: none;
-        display: inline-block;
-        white-space: nowrap;
-        word-wrap: normal;
-        direction: ltr;
-        -webkit-font-smoothing: antialiased;
-      }
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+        }
 
-      body {
-        margin: 0;
-        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        background-color: var(--md-sys-color-surface);
-        color: var(--md-sys-color-on-surface);
-        line-height: 1.6;
-      }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            line-height: 1.6;
+        }
 
-      header {
-        background-color: var(--md-sys-color-primary);
-        color: var(--md-sys-color-on-primary);
-        padding: 48px 24px;
-        text-align: center;
-      }
+        header {
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            padding: 48px 24px;
+            text-align: center;
+        }
 
-      .header-content {
-        max-width: 800px;
-        margin: 0 auto;
-      }
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-      .logo {
-        width: 120px;
-        height: 120px;
-        margin-bottom: 24px;
-      }
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 24px;
+        }
 
-      h1 {
-        margin: 0;
-        font-size: 2.5rem;
-        font-weight: 400;
-      }
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 400;
+        }
 
-      .subtitle {
-        font-size: 1.2rem;
-        opacity: 0.9;
-        margin-top: 8px;
-      }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 8px;
+        }
 
-      main {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 40px 24px;
-      }
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
 
-      section {
-        margin-bottom: 64px;
-      }
+        section {
+            margin-bottom: 64px;
+        }
 
-      h2 {
-        font-size: 1.8rem;
-        font-weight: 400;
-        border-bottom: 1px solid var(--md-sys-color-outline);
-        padding-bottom: 8px;
-        margin-bottom: 24px;
-      }
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            border-bottom: 1px solid var(--md-sys-color-outline);
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+        }
 
-      .feature-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 24px;
-      }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
 
-      .feature-card {
-        background-color: var(--md-sys-color-surface-variant);
-        color: var(--md-sys-color-on-surface-variant);
-        padding: 24px;
-        border-radius: 16px;
-      }
+        .feature-card {
+            background-color: var(--md-sys-color-surface-variant);
+            color: var(--md-sys-color-on-surface-variant);
+            padding: 24px;
+            border-radius: 16px;
+        }
 
-      .feature-icon {
-        color: var(--md-sys-color-primary);
-        margin-bottom: 16px;
-      }
+        .feature-icon {
+            color: var(--md-sys-color-primary);
+            margin-bottom: 16px;
+        }
 
-      .feature-title {
-        font-size: 1.2rem;
-        font-weight: 500;
-        margin-bottom: 8px;
-      }
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
 
-      .cta-section {
-        text-align: center;
-        background-color: var(--md-sys-color-primary-container);
-        color: var(--md-sys-color-on-primary-container);
-        padding: 48px 24px;
-        border-radius: 28px;
-        margin: 40px 0;
-      }
+        .cta-section {
+            text-align: center;
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            padding: 48px 24px;
+            border-radius: 28px;
+            margin: 40px 0;
+        }
 
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background-color: var(--md-sys-color-primary);
-        color: var(--md-sys-color-on-primary);
-        padding: 12px 24px;
-        border-radius: 20px;
-        text-decoration: none;
-        font-weight: 500;
-        transition: opacity 0.2s;
-      }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            padding: 12px 24px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
 
-      .btn:hover {
-        opacity: 0.9;
-      }
+        .btn:hover {
+            opacity: 0.9;
+        }
 
-      footer {
-        text-align: center;
-        padding: 40px 24px;
-        font-size: 0.9rem;
-        color: var(--md-sys-color-on-surface-variant);
-      }
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            font-size: 0.9rem;
+            color: var(--md-sys-color-on-surface-variant);
+        }
 
-      nav {
-        margin-top: 16px;
-      }
+        nav {
+            margin-top: 16px;
+        }
 
-      nav a {
-        margin: 0 8px;
-        color: var(--md-sys-color-primary);
-        text-decoration: none;
-      }
+        nav a {
+            margin: 0 8px;
+            color: var(--md-sys-color-primary);
+            text-decoration: none;
+        }
 
-      .badge-list {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        margin-top: 16px;
-        flex-wrap: wrap;
-      }
+        .badge-list {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <header>
-      <div class="header-content">
-        <img src="assets/icon.svg" alt="ServiceRoute-Solo Logo" class="logo" />
-        <h1>ServiceRoute-Solo</h1>
-        <p class="subtitle" data-i18n="subtitle">
-          ユーザー視点のサービス稼働状況＆接続経路チェッカー
-        </p>
-        <div class="badge-list">
-          <img
-            src="https://img.shields.io/badge/version-0.3.8-white"
-            alt="version"
-          />
-          <img
-            src="https://img.shields.io/badge/Privacy-Local%20Only-white"
-            alt="privacy"
-          />
-          <img
-            src="https://img.shields.io/badge/Manifest-V3-white"
-            alt="manifest"
-          />
+        <div class="header-content">
+            <img src="assets/icon.svg" alt="ServiceRoute-Solo Logo" class="logo">
+            <h1>ServiceRoute-Solo</h1>
+            <p class="subtitle" data-i18n="subtitle">ユーザー視点のサービス稼働状況＆接続経路チェッカー</p>
+            <div class="badge-list">
+                <img src="https://img.shields.io/badge/version-0.3.9-white" alt="version">
+                <img src="https://img.shields.io/badge/Privacy-Local%20Only-white" alt="privacy">
+                <img src="https://img.shields.io/badge/Manifest-V3-white" alt="manifest">
+            </div>
         </div>
-      </div>
     </header>
 
     <main>
-      <section id="about">
-        <h2 data-i18n="about_title">プロジェクト概要</h2>
-        <p data-i18n="about_p1">
-          ServiceRoute-Soloは、ブラウザから社内外の各種Webサービスへの可用性と接続経路を、ユーザー視点で監視・特定するためのChrome拡張機能です。
-        </p>
-        <p data-i18n="about_p2">
-          「サービスにアクセスできない」とき、それがサーバー側の障害なのか、プロキシの設定ミスなのか、あるいは単なるセッション切れ（認証エラー）なのかを、ユーザーの手元で即座に切り分けます。
-        </p>
-      </section>
+        <section id="about">
+            <h2 data-i18n="about_title">プロジェクト概要</h2>
+            <p data-i18n="about_p1">
+                ServiceRoute-Soloは、ブラウザから社内外の各種Webサービスへの可用性と接続経路を、ユーザー視点で監視・特定するためのChrome拡張機能です。
+            </p>
+            <p data-i18n="about_p2">
+                「サービスにアクセスできない」とき、それがサーバー側の障害なのか、プロキシの設定ミスなのか、あるいは単なるセッション切れ（認証エラー）なのかを、ユーザーの手元で即座に切り分けます。
+            </p>
+        </section>
 
-      <section id="features">
-        <h2 data-i18n="features_title">主な特徴</h2>
-        <div class="feature-grid">
-          <div class="feature-card">
-            <span class="material-symbols-outlined feature-icon"
-              >diagnostics</span
-            >
-            <div class="feature-title" data-i18n="feature1_title">
-              障害原因の即時特定
+        <section id="features">
+            <h2 data-i18n="features_title">主な特徴</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <span class="material-symbols-outlined feature-icon">diagnostics</span>
+                    <div class="feature-title" data-i18n="feature1_title">障害原因の即時特定</div>
+                    <p data-i18n="feature1_p">HTTPステータスやリダイレクトを解析し、問題の起点を10秒以内に特定します。</p>
+                </div>
+                <div class="feature-card">
+                    <span class="material-symbols-outlined feature-icon">lock</span>
+                    <div class="feature-title" data-i18n="feature2_title">完全ローカル・プライバシー</div>
+                    <p data-i18n="feature2_p">データはすべてブラウザ内に保存。外部サーバーへの送信は一切行いません。</p>
+                </div>
+                <div class="feature-card">
+                    <span class="material-symbols-outlined feature-icon">schedule</span>
+                    <div class="feature-title" data-i18n="feature3_title">アダプティブ・ポーリング</div>
+                    <p data-i18n="feature3_p">稼働状況に応じてチェック間隔を最適化。ネットワーク負荷を最小限に抑えます。</p>
+                </div>
+                <div class="feature-card">
+                    <span class="material-symbols-outlined feature-icon">bedtime</span>
+                    <div class="feature-title" data-i18n="feature4_title">業務時間外スリープ</div>
+                    <p data-i18n="feature4_p">夜間や休日は自動でチェックを停止。無駄なトラフィックを発生させません。</p>
+                </div>
             </div>
-            <p data-i18n="feature1_p">
-              HTTPステータスやリダイレクトを解析し、問題の起点を10秒以内に特定します。
-            </p>
-          </div>
-          <div class="feature-card">
-            <span class="material-symbols-outlined feature-icon">lock</span>
-            <div class="feature-title" data-i18n="feature2_title">
-              完全ローカル・プライバシー
-            </div>
-            <p data-i18n="feature2_p">
-              データはすべてブラウザ内に保存。外部サーバーへの送信は一切行いません。
-            </p>
-          </div>
-          <div class="feature-card">
-            <span class="material-symbols-outlined feature-icon">schedule</span>
-            <div class="feature-title" data-i18n="feature3_title">
-              アダプティブ・ポーリング
-            </div>
-            <p data-i18n="feature3_p">
-              稼働状況に応じてチェック間隔を最適化。ネットワーク負荷を最小限に抑えます。
-            </p>
-          </div>
-          <div class="feature-card">
-            <span class="material-symbols-outlined feature-icon">bedtime</span>
-            <div class="feature-title" data-i18n="feature4_title">
-              業務時間外スリープ
-            </div>
-            <p data-i18n="feature4_p">
-              夜間や休日は自動でチェックを停止。無駄なトラフィックを発生させません。
-            </p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <section class="cta-section">
-        <h3 data-i18n="cta_title">今すぐ始めましょう</h3>
-        <p data-i18n="cta_p">
-          Chrome ウェブストアから無料でインストールできます。
-        </p>
-        <a href="https://chromewebstore.google.com/" class="btn">
-          <span class="material-symbols-outlined">download</span>
-          <span data-i18n="cta_btn">Chrome ウェブストアへ</span>
-        </a>
-        <p style="font-size: 0.8rem; margin-top: 16px" data-i18n="cta_note">
-          ※現在はデベロッパーモードでのインストールのみ対応しています。
-        </p>
-      </section>
+        <section class="cta-section">
+            <h3 data-i18n="cta_title">今すぐ始めましょう</h3>
+            <p data-i18n="cta_p">Chrome ウェブストアから無料でインストールできます。</p>
+            <a href="https://chromewebstore.google.com/" class="btn">
+                <span class="material-symbols-outlined">download</span>
+                <span data-i18n="cta_btn">Chrome ウェブストアへ</span>
+            </a>
+            <p style="font-size: 0.8rem; margin-top: 16px;" data-i18n="cta_note">※現在はデベロッパーモードでのインストールのみ対応しています。</p>
+        </section>
 
-      <section id="links">
-        <h2 data-i18n="links_title">リンク</h2>
-        <ul>
-          <li>
-            <a href="usage.html" data-i18n="link_usage">使いかたガイド</a>
-          </li>
-          <li>
-            <a href="privacy.html" data-i18n="link_privacy"
-              >プライバシーポリシー</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://github.com/masanori-satake/ServiceRoute-Solo"
-              data-i18n="link_repo"
-              >GitHub リポジトリ</a
-            >
-          </li>
-        </ul>
-      </section>
+        <section id="links">
+            <h2 data-i18n="links_title">リンク</h2>
+            <ul>
+                <li><a href="usage.html" data-i18n="link_usage">使いかたガイド</a></li>
+                <li><a href="privacy.html" data-i18n="link_privacy">プライバシーポリシー</a></li>
+                <li><a href="https://github.com/masanori-satake/ServiceRoute-Solo" data-i18n="link_repo">GitHub リポジトリ</a></li>
+            </ul>
+        </section>
     </main>
 
     <footer>
-      <p>&copy; 2026 Masanori SATAKE</p>
-      <nav>
-        <a href="index.html" data-i18n="nav_home">ホーム</a>
-        <a href="usage.html" data-i18n="nav_usage">使いかた</a>
-        <a href="privacy.html" data-i18n="nav_privacy">プライバシー</a>
-      </nav>
+        <p>&copy; 2026 Masanori SATAKE</p>
+        <nav>
+            <a href="index.html" data-i18n="nav_home">ホーム</a>
+            <a href="usage.html" data-i18n="nav_usage">使いかた</a>
+            <a href="privacy.html" data-i18n="nav_privacy">プライバシー</a>
+        </nav>
     </footer>
     <script src="assets/i18n.js"></script>
-  </body>
+</body>
 </html>

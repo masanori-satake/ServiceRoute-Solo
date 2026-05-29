@@ -1,6 +1,6 @@
 # ServiceRoute-Solo
 
-[![version](https://img.shields.io/badge/version-0.3.8-blue)](projects/app/manifest.json)
+[![version](https://img.shields.io/badge/version-0.3.9-blue)](projects/app/manifest.json)
 [![License-MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Privacy-Local Only](https://img.shields.io/badge/Privacy-Local%20Only-brightgreen)](AGENTS.md)
 [![Manifest-V3](https://img.shields.io/badge/Manifest-V3-orange)](projects/app/manifest.json)
@@ -27,11 +27,9 @@
 ## インストール方法
 
 ### 🚀 Chrome ウェブストアからインストール（推奨）
-
 [Chrome ウェブストア](https://chromewebstore.google.com/) からインストールしてください。（※公開準備中）
 
 ### 🛠️ ソースコードからインストール
-
 1. このリポジトリをクローンまたはZIPダウンロードします。
 2. ブラウザで拡張機能管理ページを開きます（Chrome: `chrome://extensions`）。
 3. 「デベロッパー モード」をオンにします。
@@ -54,5 +52,4 @@
 本ソフトウェアは個人開発によるオープンソースプロジェクトであり、無保証 (AS IS) です。利用により生じたいかなる損害（データの消失、業務の中断等）についても、開発者は一切の責任を負いません。自己責任でご利用ください。
 
 ---
-
 © 2026 Masanori SATAKE
