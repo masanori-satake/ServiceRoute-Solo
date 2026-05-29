@@ -30,19 +30,23 @@ async function loadSettings() {
 }
 
 function setupEventListeners() {
-  // Keep local services in sync with background updates to prevent overwriting status/lastCheck
+  // Keep local settings in sync with background updates or other tabs
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === "local" && changes.services) {
-      const newServices = changes.services.newValue || [];
-      newServices.forEach((newS) => {
-        const localS = services.find((s) => s.url === newS.url);
-        if (localS) {
-          localS.status = newS.status;
-          localS.message = newS.message;
-          localS.lastCheck = newS.lastCheck;
-          localS.failureSince = newS.failureSince;
+    if (area === "local") {
+      if (changes.services) {
+        services = changes.services.newValue || [];
+        if (!document.querySelector(".dragging")) {
+          renderServiceList();
         }
-      });
+      }
+      if (changes.businessHours) {
+        const hours = changes.businessHours.newValue;
+        if (hours) {
+          document.getElementById("start-time").value = hours.start;
+          document.getElementById("end-time").value = hours.end;
+          document.getElementById("weekends-off").checked = hours.weekendsOff;
+        }
+      }
     }
   });
 

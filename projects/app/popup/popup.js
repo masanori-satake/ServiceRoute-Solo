@@ -45,9 +45,15 @@ async function renderServices() {
   }
 
   container.innerHTML = "";
+  const list = document.createElement("ul");
+  list.className = "service-list";
+
   services.forEach((service) => {
-    const card = document.createElement("div");
-    card.className = "service-card";
+    const li = document.createElement("li");
+    li.className = "service-item";
+    li.title = `${service.name} (${service.url}) を開く`;
+    li.tabIndex = 0;
+    li.setAttribute("role", "button");
 
     const duration = service.failureSince
       ? calculateDuration(service.failureSince)
@@ -62,9 +68,9 @@ async function renderServices() {
 
     const statusInfo = getStatusSymbol(service.status);
 
-    card.innerHTML = `
+    li.innerHTML = `
       <div class="status-icon-container">
-        <span class="material-symbols-outlined ${statusInfo.className}">${statusInfo.symbol}</span>
+        <span class="material-symbols-outlined ${statusInfo.className}" style="font-size: 20px;">${statusInfo.symbol}</span>
       </div>
       <div class="service-info">
         <span class="service-name">${escapeHtml(service.name)}</span>
@@ -77,8 +83,22 @@ async function renderServices() {
         <span class="last-check-time">${lastCheckTime}</span>
       </div>
     `;
-    container.appendChild(card);
+
+    const openService = () => {
+      chrome.tabs.create({ url: service.url });
+    };
+
+    li.addEventListener("click", openService);
+    li.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openService();
+      }
+    });
+
+    list.appendChild(li);
   });
+  container.appendChild(list);
 }
 
 /**
