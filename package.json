@@ -5,7 +5,8 @@
   "scripts": {
     "test": "npx playwright test projects/app/tests --output projects/app/test-results",
     "build": "python3 scripts/build.py",
-    "version:check": "python3 scripts/check_version.py"
+    "version:check": "python3 scripts/check_version.py",
+    "assets:generate": "python3 scripts/generate_png_icons.py && python3 scripts/generate_store_assets.py"
   },
   "author": "Masanori SATAKE",
   "license": "MIT",
