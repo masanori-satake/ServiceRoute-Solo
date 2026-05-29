@@ -262,8 +262,6 @@ async function checkOffHours() {
 /**
  * Update the extension icon based on the current status of all services
  */
-let blinkIntervalId = null;
-
 async function updateActionIcon() {
   const { services = [] } = await chrome.storage.local.get("services");
 
@@ -274,31 +272,8 @@ async function updateActionIcon() {
     globalStatus = "WARNING";
   }
 
-  // Clear any existing blinking
-  if (blinkIntervalId) {
-    clearInterval(blinkIntervalId);
-    blinkIntervalId = null;
-  }
-
   if (globalStatus === "ERROR") {
-    let count = 0;
-    const maxBlinks = 30; // 30 seconds
-    let isNormal = false;
-
-    // Initial set
     setIcon("error");
-
-    blinkIntervalId = setInterval(() => {
-      count++;
-      if (count >= maxBlinks) {
-        clearInterval(blinkIntervalId);
-        blinkIntervalId = null;
-        setIcon("error");
-        return;
-      }
-      isNormal = !isNormal;
-      setIcon(isNormal ? "icon" : "error");
-    }, 1000);
   } else if (globalStatus === "WARNING") {
     setIcon("warning");
   } else {
