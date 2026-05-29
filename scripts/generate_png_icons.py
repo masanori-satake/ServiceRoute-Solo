@@ -31,7 +31,7 @@ def generate_icons(output_dir=None, bg_color=None):
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={"width": 512, "height": 512})
-        page.set_content(f"<!DOCTYPE html><html><body style='margin:0;overflow:hidden;'>{svg_content}</body></html>")
+        page.set_content(f'<!DOCTYPE html><html><head><style>html, body {{ margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }} svg {{ width: 100%; height: 100%; display: block; }}</style></head><body>{svg_content}</body></html>')
 
         for size in [16, 32, 48, 128]:
             out = os.path.join(output_dir, f"icon{size}.png")
