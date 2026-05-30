@@ -8,9 +8,19 @@ def generate_store_assets():
     root_dir = os.path.dirname(script_dir)
     app_dir = os.path.join(root_dir, "projects/app")
     output_dir = os.path.join(app_dir, "assets/store/screenshots")
+    manifest_path = os.path.join(app_dir, "manifest.json")
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
+
+    version = "1.0.0"
+    try:
+        if os.path.exists(manifest_path):
+            with open(manifest_path, "r", encoding="utf-8") as f:
+                manifest_data = json.load(f)
+                version = manifest_data.get("version", version)
+    except Exception as e:
+        print(f"Warning: Could not read version from manifest: {e}")
 
     try:
         from playwright.sync_api import sync_playwright
@@ -54,7 +64,7 @@ def generate_store_assets():
                     getMessage: (key) => key
                 };
                 window.chrome.runtime = window.chrome.runtime || {
-                    getManifest: () => ({ version: '0.3.9' }),
+                    getManifest: () => ({ version: '""" + version + """' }),
                     sendMessage: () => {},
                     onMessage: { addListener: () => {} }
                 };
