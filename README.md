@@ -30,7 +30,7 @@
 ### 🚀 Chrome ウェブストアからインストール（推奨）
 
 <a href="https://chromewebstore.google.com/detail/serviceroute-solo/gkgjpkhcpijhdcaledmhggcceigkgoja">
-  <img src="https://developer.chrome.com/static/docs/webstore/branding/image/206x58-chrome-web-bcb82d15b2486.png" alt="Chrome ウェブストアで入手" />
+  <img src="projects/web/assets/chrome-web-store-badge.png" alt="Chrome ウェブストアで入手" />
 </a>
 
 ### 🛠️ ソースコードからインストール
