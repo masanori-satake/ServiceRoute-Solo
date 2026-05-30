@@ -1,6 +1,7 @@
 # ServiceRoute-Solo
 
 [![version](https://img.shields.io/badge/version-1.0.0-blue)](projects/app/manifest.json)
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/gkgjpkhcpijhdcaledmhggcceigkgoja)](https://chromewebstore.google.com/detail/serviceroute-solo/gkgjpkhcpijhdcaledmhggcceigkgoja)
 [![License-MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Privacy-Local Only](https://img.shields.io/badge/Privacy-Local%20Only-brightgreen)](AGENTS.md)
 [![Manifest-V3](https://img.shields.io/badge/Manifest-V3-orange)](projects/app/manifest.json)
@@ -28,7 +29,9 @@
 
 ### 🚀 Chrome ウェブストアからインストール（推奨）
 
-[Chrome ウェブストア](https://chromewebstore.google.com/) からインストールしてください。
+<a href="https://chromewebstore.google.com/detail/serviceroute-solo/gkgjpkhcpijhdcaledmhggcceigkgoja">
+  <img src="https://developer.chrome.com/static/docs/webstore/branding/image/206x58-chrome-web-bcb82d15b2486.png" alt="Chrome ウェブストアで入手" />
+</a>
 
 ### 🛠️ ソースコードからインストール
 
