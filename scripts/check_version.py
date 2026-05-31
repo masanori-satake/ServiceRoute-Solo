@@ -63,9 +63,12 @@ def check_version_consistency():
         if os.path.exists(specs_path):
             with open(specs_path, "r", encoding="utf-8") as f:
                 content = f.read()
-                match = re.search(r'"version":\s*"([\d\.]+)"', content)
-                if match:
-                    versions[specs_path] = match.group(1)
+                matches = re.findall(r'"version":\s*"([\d\.]+)"', content)
+                if matches:
+                    if len(set(matches)) > 1:
+                        print(f"Error: Inconsistent versions found within {specs_path}: {set(matches)}")
+                        return False
+                    versions[specs_path] = matches[0]
                 else:
                     print(f"Error: Version not found in {specs_path}")
                     return False
