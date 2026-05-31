@@ -48,9 +48,12 @@ def check_version_consistency():
         if os.path.exists(agents_path):
             with open(agents_path, "r", encoding="utf-8") as f:
                 content = f.read()
-                match = re.search(r'"version":\s*"([\d\.]+)"', content)
-                if match:
-                    versions[agents_path] = match.group(1)
+                matches = re.findall(r'"version":\s*"([\d\.]+)"', content)
+                if matches:
+                    if len(set(matches)) > 1:
+                        print(f"Error: Inconsistent versions found within {agents_path}: {set(matches)}")
+                        return False
+                    versions[agents_path] = matches[0]
                 else:
                     print(f"Error: Version not found in {agents_path}")
                     return False
