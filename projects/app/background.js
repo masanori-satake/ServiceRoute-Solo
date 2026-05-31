@@ -34,13 +34,11 @@ chrome.runtime.onInstalled.addListener(async () => {
   }
   await setupAlarm();
   await dispatchChecks();
-  await updateActionIcon();
 });
 
 chrome.runtime.onStartup.addListener(async () => {
   await setupAlarm();
   await dispatchChecks();
-  await updateActionIcon();
 });
 
 /**
@@ -49,7 +47,7 @@ chrome.runtime.onStartup.addListener(async () => {
 chrome.idle.onStateChanged.addListener(async (newState) => {
   console.log(`Idle state changed to: ${newState}`);
   if (newState === "locked" || newState === "idle") {
-    chrome.alarms.clear(ALARM_NAME);
+    await chrome.alarms.clear(ALARM_NAME);
   } else {
     await setupAlarm();
     await dispatchChecks();
