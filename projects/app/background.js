@@ -16,6 +16,8 @@ const INTERVALS = {
 /**
  * Initialize alarms and listeners
  */
+chrome.idle.setDetectionInterval(300); // 5 minutes
+
 chrome.runtime.onInstalled.addListener(async () => {
   const { services } = await chrome.storage.local.get("services");
   if (!services) {
@@ -30,24 +32,27 @@ chrome.runtime.onInstalled.addListener(async () => {
       },
     });
   }
-  setupAlarm();
-  updateActionIcon();
+  await setupAlarm();
+  await dispatchChecks();
+  await updateActionIcon();
 });
 
-chrome.runtime.onStartup.addListener(() => {
-  setupAlarm();
-  updateActionIcon();
+chrome.runtime.onStartup.addListener(async () => {
+  await setupAlarm();
+  await dispatchChecks();
+  await updateActionIcon();
 });
 
 /**
  * Handle Idle state changes
  */
-chrome.idle.onStateChanged.addListener((newState) => {
+chrome.idle.onStateChanged.addListener(async (newState) => {
   console.log(`Idle state changed to: ${newState}`);
   if (newState === "locked" || newState === "idle") {
     chrome.alarms.clear(ALARM_NAME);
   } else {
-    setupAlarm();
+    await setupAlarm();
+    await dispatchChecks();
   }
 });
 
