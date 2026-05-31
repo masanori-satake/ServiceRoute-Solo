@@ -72,7 +72,7 @@ Julesがコードを生成する際の技術的アプローチ、および具体
 {
   "manifest_version": 3,
   "name": "ServiceRoute-Solo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "permissions": ["storage", "idle"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
   "background": {

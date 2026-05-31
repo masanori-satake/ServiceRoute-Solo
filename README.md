@@ -1,6 +1,6 @@
 # ServiceRoute-Solo
 
-[![version](https://img.shields.io/badge/version-1.0.0-blue)](projects/app/manifest.json)
+[![version](https://img.shields.io/badge/version-1.0.1-blue)](projects/app/manifest.json)
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/gkgjpkhcpijhdcaledmhggcceigkgoja)](https://chromewebstore.google.com/detail/serviceroute-solo/gkgjpkhcpijhdcaledmhggcceigkgoja)
 [![License-MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Privacy-Local Only](https://img.shields.io/badge/Privacy-Local%20Only-brightgreen)](AGENTS.md)
