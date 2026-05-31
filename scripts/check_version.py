@@ -78,9 +78,12 @@ def check_version_consistency():
         if os.path.exists(assets_script_path):
             with open(assets_script_path, "r", encoding="utf-8") as f:
                 content = f.read()
-                match = re.search(r'version\s*=\s*"([\d\.]+)"', content)
-                if match:
-                    versions[assets_script_path] = match.group(1)
+                matches = re.findall(r"version\s*=\s*['\"]([\d\.]+)['\"]", content)
+                if matches:
+                    if len(set(matches)) > 1:
+                        print(f"Error: Inconsistent versions found within {assets_script_path}: {set(matches)}")
+                        return False
+                    versions[assets_script_path] = matches[0]
                 else:
                     print(f"Error: Version not found in {assets_script_path}")
                     return False
