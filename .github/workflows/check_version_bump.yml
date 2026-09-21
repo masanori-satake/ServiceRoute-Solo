@@ -2,9 +2,9 @@ name: "バージョン更新確認 (Check Version Bump)"
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'projects/app/**'
+      - "projects/app/**"
 
 permissions:
   contents: read
@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Check version bump
         run: |

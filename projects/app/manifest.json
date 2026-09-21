@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ServiceRoute-Solo",
-  "version": "1.0.1",
-  "description": "User-centric service availability and connectivity route checker.",
+  "name": "ServiceRoute-Solo - Status & Route Checker",
+  "version": "1.0.2",
+  "description": "Check if web services & endpoints are up or failing. Lightweight, privacy-first, zero external server, 100% local status monitor.",
   "permissions": ["storage", "idle", "alarms"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
   "background": {
