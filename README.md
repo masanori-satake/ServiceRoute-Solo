@@ -16,10 +16,10 @@ Modern software development and daily workflows rely on dozens of internal and c
 
 ## Key Features
 
-- **Instant Route & Status Diagnosis (`service-checker`, `route-checker`):** Analyzes HTTP status codes and redirect targets to isolate connection failures within 10 seconds.
+- **Instant Route & Status Diagnosis (`service-checker`, `route-checker`):** Analyzes HTTP status codes and redirect targets. Checks normally complete within 10 seconds, but can take approximately 15 seconds when `checkService`'s initial fetch times out and the `redirect: "manual"` confirmation also runs.
 - **Real-Time Uptime Monitoring (`status-monitor`, `uptime-checker`):** Checks essential endpoints continuously and presents service health with intuitive Material Design 3 indicators.
-- **SSO & Session Aware (`network-status`):** Shares browser session credentials to verify authenticated internal portals and services without extra logins.
-- **Adaptive Polling & Smart Sleep:** Automatically adjusts check intervals (15–30 mins) and enters sleep mode outside business hours to prevent wasteful network traffic.
+- **Redirect & Login Detection (`network-status`):** Detects redirects to login pages and authentication failures without sharing SSO session cookies with cross-origin monitoring targets.
+- **Adaptive Polling & Smart Sleep:** Checks every 2 minutes during the first 10 minutes of an outage, every 15 minutes during normal operation, and every 30 minutes for longer outages or while rate-limited; it sleeps outside business hours to prevent wasteful network traffic.
 - **100% Local Privacy First (`chrome-extension`):** Leverages dynamic host permissions (`optional_host_permissions`) to check targets directly without external API dependencies.
 
 ## 🔒 Privacy & Security
@@ -95,7 +95,7 @@ Modern software development and daily workflows rely on dozens of internal and c
 
 ### プライバシーとセキュリティ
 
-- **完全ローカル実行 (Local Only):** 本拡張機能は、設定されたターゲットURL以外への通信を一切行いません。
+- **完全ローカル実行 (Local Only):** 本拡張機能は、設定されたターゲットURLと、初回の `redirect: "follow"` によって到達するリダイレクト先にのみ通信します。
 - **トラッキングなし:** アクセス解析や広告、外部サービスへのデータ送信は一切行いません。
 - **透明性:** 外部ライブラリを一切使用しない Vanilla JS 構成。依存関係によるブラックボックスを排除しています。
 
