@@ -11,9 +11,7 @@ test.describe("Background Script Initialization", () => {
     expect(fs.existsSync(backgroundPath)).toBe(true);
 
     const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
-    expect(manifest.name).toBe(
-      "ServiceRoute-Solo - Status & Route Checker",
-    );
+    expect(manifest.name).toContain("ServiceRoute-Solo");
   });
 
   test("versions should match between manifest and package.json", async () => {

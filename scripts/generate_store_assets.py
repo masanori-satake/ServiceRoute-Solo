@@ -4,7 +4,6 @@ import time
 import json
 
 def generate_store_assets():
-    """Generate Chrome Web Store screenshots from the extension UI."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     root_dir = os.path.dirname(script_dir)
     app_dir = os.path.join(root_dir, "projects/app")

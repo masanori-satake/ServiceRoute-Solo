@@ -2,14 +2,14 @@ name: "監査: 透明性とセキュリティ (Audit: Transparency and Security)
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'projects/**'
-      - 'scripts/**'
-      - 'package.json'
-      - 'package-lock.json'
+      - "projects/**"
+      - "scripts/**"
+      - "package.json"
+      - "package-lock.json"
   workflow_dispatch:
 
 env:
@@ -31,7 +31,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: バージョンの一貫性確認 (Version Consistency)
         run: python scripts/check_version.py
