@@ -16,5 +16,9 @@ jobs:
     uses: masanori-satake/common-workflows/.github/workflows/base-release.yml@v1
     permissions:
       contents: write
-    # project_name=リポジトリ名, releases/*.zip 添付などの統一パラメータは base 側に閉じ込め済み。
-    # npm run build (= python3 scripts/build.py) が releases/*.zip を生成する。
+    with:
+      # リリース ZIP は base-release 側で {リポジトリ名}-v{version}.zip に統一生成する（方式A）。
+      package_source_dir: 'projects/app'
+    # マニフェストは projects/app/manifest.json のためリネーム不要。
+    # アイコンは複数バリアント(icon/error/warning)の固有処理のため generate_icons は使用せず、
+    # コミット済み PNG を同梱する（assets:generate でローカル生成）。
