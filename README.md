@@ -1,10 +1,12 @@
 # ServiceRoute-Solo - Quick Web Service Status & Route Checker
 
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/gkgjpkhcpijhdcaledmhggcceigkgoja?logo=google-chrome&logoColor=white&label=Chrome%20Web%20Store)](https://chromewebstore.google.com/detail/serviceroute-solo/gkgjpkhcpijhdcaledmhggcceigkgoja)
 [![version](https://img.shields.io/badge/version-1.0.2-blue)](projects/app/manifest.json)
-[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/gkgjpkhcpijhdcaledmhggcceigkgoja)](https://chromewebstore.google.com/detail/serviceroute-solo/gkgjpkhcpijhdcaledmhggcceigkgoja)
-[![License-MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Privacy-Local Only](https://img.shields.io/badge/Privacy-100%25%20Local-brightgreen)](AGENTS.md)
-[![Manifest-V3](https://img.shields.io/badge/Manifest-V3-orange)](projects/app/manifest.json)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Privacy: 100% Local](https://img.shields.io/badge/Privacy-100%25%20Local-brightgreen)](#-privacy--security)
+[![Manifest V3](https://img.shields.io/badge/Manifest-V3-orange)](projects/app/manifest.json)
+[![Tests](https://img.shields.io/github/actions/workflow/status/masanori-satake/ServiceRoute-Solo/code-quality.yml?branch=main&label=Tests)](https://github.com/masanori-satake/ServiceRoute-Solo/actions/workflows/code-quality.yml)
+[![Pure Vanilla JS](https://img.shields.io/badge/Pure%20Vanilla%20JS-Zero%20Dependencies-informational?logo=javascript&logoColor=white)](#-privacy--security)
 
 > A lightweight, privacy-first Chrome extension to instantly monitor web service status, track connectivity routes, and detect downtime right from your browser.
 
