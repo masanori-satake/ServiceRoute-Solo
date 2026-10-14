@@ -3,7 +3,7 @@
   "name": "ServiceRoute-Solo - Status & Route Checker",
   "short_name": "__MSG_short_name__",
   "default_locale": "en",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Check if web services & endpoints are up or failing. Lightweight, privacy-first, zero external server, 100% local status monitor.",
   "permissions": ["storage", "idle", "alarms"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
