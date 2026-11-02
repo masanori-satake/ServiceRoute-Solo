@@ -130,8 +130,19 @@ def plan_json(target: JsonTarget, text: str, new_version: str) -> tuple[str, str
     expected = copy.deepcopy(data)
     expected["version"] = new_version
     count = 1
-    root_package = data.get("packages", {}).get("") if target.lockfile else None
-    if isinstance(root_package, dict) and "version" in root_package:
+    # lockfileVersion 2 以降（"packages" あり）は packages[""].version も必ず更新する。
+    # 形式が想定と違う場合は、root だけを更新して不整合を残さないよう計画の時点で失敗する。
+    # lockfileVersion 1（"packages" なし）は root の "version" だけを持つ
+    if target.lockfile and "packages" in data:
+        packages = data["packages"]
+        root_package = packages.get("") if isinstance(packages, dict) else None
+        if not isinstance(root_package, dict) or not isinstance(
+            root_package.get("version"), str
+        ):
+            raise UpdateError(
+                f'{target.path} に packages[""].version がありません'
+                "（npm install で lockfile を作り直してから実行してください）。"
+            )
         if root_package["version"] != old:
             raise UpdateError(
                 f'{target.path} の "version"（{old}）と packages[""].version（{root_package["version"]}）が'
