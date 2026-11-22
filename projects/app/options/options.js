@@ -72,9 +72,18 @@ function setupEventListeners() {
   const addModal = document.getElementById("add-modal");
   const deleteModal = document.getElementById("delete-modal");
   const importConfirmModal = document.getElementById("import-confirm-modal");
+  const soloModal = document.getElementById("solo-modal");
 
   document.getElementById("add-service-btn").addEventListener("click", () => {
     openAddModal();
+  });
+
+  document.getElementById("solo-btn").addEventListener("click", () => {
+    soloModal.style.display = "flex";
+  });
+
+  document.getElementById("close-solo-modal").addEventListener("click", () => {
+    soloModal.style.display = "none";
   });
 
   document.getElementById("cancel-add").addEventListener("click", () => {
@@ -111,6 +120,9 @@ function setupEventListeners() {
     if (e.target === importConfirmModal) {
       importConfirmModal.style.display = "none";
       fileInput.value = "";
+    }
+    if (e.target === soloModal) {
+      soloModal.style.display = "none";
     }
   });
 
