@@ -1,1 +1,14 @@
-{"appDesc":{"description":"Description of the extension shown in the browser and the store","message":"Check if web services & endpoints are up or failing. Lightweight, privacy-first, zero external server, 100% local status monitor."},"appName":{"description":"Name of the extension shown in the browser and the store","message":"ServiceRoute-Solo - Status & Route Checker"},"short_name":{"description":"Short name of the extension","message":"ServiceRoute"}}
+{
+  "appDesc": {
+    "description": "Description of the extension shown in the browser and the store",
+    "message": "Check if web services & endpoints are up or failing. Lightweight, privacy-first, zero external server, 100% local status monitor."
+  },
+  "appName": {
+    "description": "Name of the extension shown in the browser and the store",
+    "message": "ServiceRoute-Solo - Status & Route Checker"
+  },
+  "short_name": {
+    "description": "Short name of the extension",
+    "message": "ServiceRoute"
+  }
+}
