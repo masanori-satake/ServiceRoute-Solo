@@ -1,6 +1,14 @@
 {
+  "appDesc": {
+    "description": "Description of the extension shown in the browser and the store",
+    "message": "常用Webサービスの稼働状態と経路を確認できる、100%ローカル・軽量・プライバシー重視のステータスモニター。"
+  },
+  "appName": {
+    "description": "Name of the extension shown in the browser and the store",
+    "message": "ServiceRoute-Solo - 常用Webサービス稼働＆ネットワーク経路チェッカー"
+  },
   "short_name": {
-    "message": "ServiceRoute",
-    "description": "Short name of the extension"
+    "description": "Short name of the extension",
+    "message": "ServiceRoute"
   }
 }

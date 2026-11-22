@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "ServiceRoute-Solo - Status & Route Checker",
+  "name": "__MSG_appName__",
   "short_name": "__MSG_short_name__",
   "default_locale": "en",
-  "version": "1.0.3",
-  "description": "Check if web services & endpoints are up or failing. Lightweight, privacy-first, zero external server, 100% local status monitor.",
+  "version": "1.0.4",
+  "description": "__MSG_appDesc__",
   "permissions": ["storage", "idle", "alarms"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
   "background": {
