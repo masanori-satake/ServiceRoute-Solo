@@ -283,6 +283,39 @@
         margin-top: 24px;
       }
 
+      /* Page Header */
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      /* Solo/Duo Modal */
+      .modal-wide {
+        max-width: 480px;
+      }
+
+      .solo-category {
+        margin-bottom: 16px;
+      }
+
+      .solo-category-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--md-sys-color-on-surface-variant);
+        margin-bottom: 8px;
+      }
+
+      .solo-badge-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .solo-badge-list a {
+        display: inline-flex;
+      }
+
       /* Legend Table */
       .legend-section {
         margin-top: 40px;
@@ -384,7 +417,17 @@
   </head>
   <body>
     <div class="container">
-      <h1>ServiceRoute-Solo 設定</h1>
+      <div class="page-header">
+        <h1>ServiceRoute-Solo 設定</h1>
+        <button
+          id="solo-btn"
+          class="btn-icon"
+          title="Solo/Duoシリーズ"
+          aria-label="Solo/Duoシリーズ"
+        >
+          <span class="material-symbols-outlined">extension</span>
+        </button>
+      </div>
 
       <section id="monitoring-hours">
         <div class="section-header">
@@ -673,6 +716,126 @@
           >
             削除する
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Solo/Duo Modal -->
+    <div id="solo-modal" class="modal-overlay">
+      <div class="modal modal-wide">
+        <h3 class="modal-title">Solo/Duoシリーズ</h3>
+        <div class="solo-category">
+          <div class="solo-category-title">作業効率化</div>
+          <div class="solo-badge-list">
+            <a
+              href="https://chromewebstore.google.com/detail/quicklog-solo-local-task/kllhfalcincleolgoepnailfjendigdh"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/quicklog-solo.svg"
+                alt="QuickLog-Solo"
+              />
+            </a>
+            <a
+              href="https://chromewebstore.google.com/detail/flexpaste-solo-smart-clip/egmememialdjhohecnfkimpablkjfabg"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/flexpaste-solo.svg"
+                alt="FlexPaste-Solo"
+              />
+            </a>
+            <a
+              href="https://chromewebstore.google.com/detail/replace-solo-microsoft-lo/iblfnonogpkajjfjfljngdaclhdinlfb"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/replace-solo.svg"
+                alt="Replace-Solo"
+              />
+            </a>
+            <a
+              href="https://chromewebstore.google.com/detail/tabmagnet-solo-smart-tab/lffgddghjafcjpfjdpknhfbonhnkdlmc"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/tabmagnet-solo.svg"
+                alt="TabMagnet-Solo"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="solo-category">
+          <div class="solo-category-title">会議/授業支援</div>
+          <div class="solo-badge-list">
+            <a
+              href="https://chromewebstore.google.com/detail/omniview-solo-whiteboard/jnkmbcicplfobgllfljekhlaofkdooam"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/omniview-solo.svg"
+                alt="OmniView-Solo"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="solo-category">
+          <div class="solo-category-title">開発者向け</div>
+          <div class="solo-badge-list">
+            <a
+              href="https://chromewebstore.google.com/detail/issues-solo-jira-issues-s/cehkajdhieihmoghbneckifpkoafmbco"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/issues-solo.svg"
+                alt="Issues-Solo"
+              />
+            </a>
+            <a
+              href="https://chromewebstore.google.com/detail/actionsboard-solo-github/oofegjdjnldkikigimkadlleaiolionm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/actionsboard-solo.svg"
+                alt="ActionsBoard-Solo"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="solo-category">
+          <div class="solo-category-title">エディタ拡張</div>
+          <div class="solo-badge-list">
+            <a
+              href="https://marketplace.visualstudio.com/publishers/masanori-satake"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/vscode-marketplace-publisher.svg"
+                alt="VS Code Marketplace: masanori-satake"
+              />
+            </a>
+            <a
+              href="https://open-vsx.org/namespace/masanori-satake"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="../assets/badges/solo/open-vsx-publisher.svg"
+                alt="Open VSX Registry: masanori-satake"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button id="close-solo-modal" class="btn-text">閉じる</button>
         </div>
       </div>
     </div>
