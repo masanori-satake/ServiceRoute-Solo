@@ -11,9 +11,10 @@ on:
           - chrome
           - both
           - edge
-        # Edge の初回提出（Partner Center）が済むまでは chrome を既定にし、
-        # 誤って Edge へ投げる事故を防ぐ。初回提出後は both へ変更してよい。
-        default: 'chrome'
+        # 公開先は Edge のみ（Chrome は非公開方針）。ただし Chrome の
+        # 下書きは最新版に追随させておくため、既定は both とする。
+        # Chrome 側は chrome_publish: false でアップロードのみ（審査には出ない）。
+        default: 'both'
 
 # 提出の直列化は base 側（ストア別ジョブの concurrency）で行うため、
 # 呼び出し側に concurrency は置かない（実行中の提出をキャンセルしない）。
@@ -31,7 +32,7 @@ jobs:
       chrome_item_id: 'gkgjpkhcpijhdcaledmhggcceigkgoja'
       # Chrome は公開中止のため、アップロードのみで下書きを更新し審査には出さない
       chrome_publish: false
-      # Microsoft Edge Add-ons の製品 ID（Partner Center 初回提出済み 2026-11-22、認定審査中）
+      # Microsoft Edge Add-ons の製品 ID（v1.0.4 公開済み。自動提出は v1.0.5 で実証済み）
       edge_product_id: '97339d82-327b-4774-b32c-284815f78bda'
       # 提出 ZIP は release-package と同じく projects/app から base 側で生成する
       package_source_dir: 'projects/app'
