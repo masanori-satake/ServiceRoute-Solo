@@ -11,9 +11,10 @@ on:
           - chrome
           - both
           - edge
-        # ServiceRoute は Edge のみで公開する方針（Chrome は非公開）。
-        # Chrome の下書き更新が必要なときだけ、手動で chrome を選ぶ。
-        default: 'edge'
+        # 公開先は Edge のみ（Chrome は非公開方針）。ただし Chrome の
+        # 下書きは最新版に追随させておくため、既定は both とする。
+        # Chrome 側は chrome_publish: false でアップロードのみ（審査には出ない）。
+        default: 'both'
 
 # 提出の直列化は base 側（ストア別ジョブの concurrency）で行うため、
 # 呼び出し側に concurrency は置かない（実行中の提出をキャンセルしない）。
