@@ -13,7 +13,7 @@ def generate_store_assets():
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
-    version = "1.0.6"
+    version = "1.0.7"
     try:
         if os.path.exists(manifest_path):
             with open(manifest_path, "r", encoding="utf-8") as f:
