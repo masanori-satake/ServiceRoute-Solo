@@ -34,5 +34,39 @@ jobs:
       chrome_publish: false
       # Microsoft Edge Add-ons の製品 ID（v1.0.4 公開済み。自動提出は v1.0.5 で実証済み）
       edge_product_id: '97339d82-327b-4774-b32c-284815f78bda'
+      # Edge 認証担当者向けメモ（Notes for Certification）。
+      # 1.0.7 がポリシー 1.3（Product is Testable）で認証失敗したため、
+      # 機能説明とテスト手順を固定文として毎回送る。
+      edge_notes: |
+        WHAT THIS EXTENSION DOES
+
+        ServiceRoute-Solo monitors the availability of web services that the user registers. It loads each registered URL from within the user's own browser (using the user's session) and reports the result in the popup: operating normally, redirected to a login page, HTTP error, unreachable, and so on. It is a troubleshooting aid for telling whether a service is down, a proxy is failing, or a sign-in session has expired.
+
+        IMPORTANT — WHY THE POPUP IS EMPTY AT FIRST
+
+        By design, the extension ships with NO pre-registered services and no built-in endpoints, for privacy: it must never contact an address the user did not choose. On a fresh install the popup shows a Japanese message meaning "No services are registered. Please add one from Settings." The primary functionality appears only after a service is added, as follows.
+
+        HOW TO TEST (about 1 minute; no account or credentials are needed)
+
+        1. Install the extension and click its toolbar icon. The popup opens and shows the empty state described above.
+        2. Click the gear (Settings) icon in the popup. The Options page opens in a new tab. The UI is in Japanese; the key labels are translated below.
+        3. In the "Monitored services" section, click the "+" (Add) button. In the "Add service" dialog, enter Name: Example, URL: https://example.com and click the button labelled "Add and approve permission".
+        4. The browser shows a host-permission prompt for example.com. Approve it. Host access is requested per domain, only for domains the user adds.
+        5. Click the toolbar icon again. A check runs when a service is added, and within a few seconds "Example" shows a green "Operating normally" status, because https://example.com returns HTTP 200.
+        6. Optional failure check: add a second service with the URL https://example.com/no-such-page-404 — it is reported with a warning status (HTTP 404), which demonstrates the failure-detection side.
+
+        KEY UI LABELS (Japanese -> English)
+
+        - サービス状況 = Service status
+        - サービスが登録されていません。設定から追加してください。 = No services are registered. Please add one from Settings.
+        - 監視対象サービス = Monitored services
+        - サービスの追加 = Add service
+        - 追加して権限を承認 = Add and approve permission
+        - 正常稼働 = Operating normally
+
+        NOTES
+
+        - All checks run locally in the browser. The extension has no server and collects no data.
+        - After the first check it re-checks automatically every 15–30 minutes, and pauses outside the monitoring hours set on the Options page. The popup's refresh icon re-checks on demand.
       # 提出 ZIP は release-package と同じく projects/app から base 側で生成する
       package_source_dir: 'projects/app'
