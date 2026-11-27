@@ -40,7 +40,7 @@ jobs:
       edge_notes: |
         WHAT THIS EXTENSION DOES
 
-        ServiceRoute-Solo monitors the availability of web services that the user registers. It loads each registered URL from within the user's own browser (using the user's session) and reports the result in the popup: operating normally, redirected to a login page, HTTP error, unreachable, and so on. It is a troubleshooting aid for telling whether a service is down, a proxy is failing, or a sign-in session has expired.
+        ServiceRoute-Solo monitors the availability of web services that the user registers. It loads each registered URL from within the user's own browser, so what gets tested is the user's actual network route, including intranet reachability. It then reports the result in the popup: operating normally, redirected to a login page, HTTP error, unreachable, and so on. It is a troubleshooting aid for telling whether a service is down, a proxy is failing, or a sign-in session has expired.
 
         IMPORTANT — WHY THE POPUP IS EMPTY AT FIRST
 
